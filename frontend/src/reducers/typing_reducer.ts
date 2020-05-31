@@ -1,38 +1,34 @@
 import { Character } from "../util";
+import { Action } from "./main";
 
 export type TData = {
-  index: number;
-  error: boolean;
+  currIndex: number;
+  error: string | null;
   value: string;
-  text: Character[] | null;
-};
-
-export type Action = {
-  payload?: any;
-  type: Symbol;
+  typing_text: Character[] | null;
+  completed: boolean;
 };
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol();
 
-function TypingReducer(state: TData, { type, payload }: Action) {
+const initState: TData = {
+  error: null,
+  currIndex: 0,
+  typing_text: null,
+  value: "",
+  completed: false,
+};
+
+function TypingReducer(state: TData = initState, { type, payload }: Action) {
   switch (type) {
     case INC_INDEX:
-      if (!state.text) return state;
-      const text = [...state.text];
-      text[state.index].completed = true;
-      return {
-        error: false,
-        index: state.index + 1,
-        value: state.value + payload,
-        text,
-      };
+      return payload;
     case SET_ERROR:
-      return { ...state, error: true };
+      return { ...state, error: payload };
     case SET_TYPING:
-      console.log(payload);
-      return { ...state, text: payload as Character[] };
+      return { ...state, typing_text: payload as Character[] };
     default:
       return state;
   }

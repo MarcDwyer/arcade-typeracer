@@ -1,44 +1,21 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useEffect } from "react";
 import { typeText } from "./typing_text";
-import TypingReducer, {
-  INC_INDEX,
-  SET_ERROR,
-  TData,
-  SET_TYPING,
-} from "./reducers/typing_reducer";
-import { transformChar, Character } from "./util";
-import "./App.scss";
+import { SET_TYPING } from "./reducers/typing_reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { ReduxStore } from "./reducers/main";
 
-export const initState: TData = {
-  error: false,
-  index: 0,
-  text: null,
-  value: "",
-};
+import { handleTyping } from "./actions/typing_actions";
+
+import { transformChar } from "./util";
+
+import "./App.scss";
+import { Theme } from "./themes/theme_colors.";
+
+// Number of words in text / time taken to complete
 
 function App() {
-  const [tData, dispatch] = useReducer(TypingReducer, initState);
-  const handleTyping = (char: string) => {
-    const { index, text } = tData;
-    if (!text) return;
-    char = char[char.length - 1];
-    const curr = text[index];
-    try {
-      if (!curr) throw "There is no current";
-      if (curr.char === char) {
-        dispatch({
-          type: INC_INDEX,
-          payload: char,
-        });
-      } else {
-        dispatch({
-          type: SET_ERROR,
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const tData = useSelector((state: ReduxStore.State) => state.typing);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({
@@ -46,29 +23,34 @@ function App() {
       payload: transformChar(typeText.tutorial),
     });
   }, []);
-  console.log();
+
   return (
     <div className="App">
-      <div className="inner-div">
-        {tData.text && (
+      <div className="inner-div" style={{ backgroundColor: Theme.shadeColor }}>
+        {tData.completed && <span>Congrats you have finished!</span>}
+        {tData.typing_text && (
           <>
             <div className="text">
-              {tData.text.map(({ char, completed }, i) => {
-                return <span
-                  key={i}
-                  style={{ color: completed ? "green" : "#eee" }}
-                >
-                  {char}
-                </span>;
+              {tData.typing_text.map(({ char, completed }, i) => {
+                let styles = {};
+                if (completed) {
+                  styles = {
+                    ...styles,
+                    color: Theme.colorSuccess,
+                  };
+                }
+                return (
+                  <span key={i} style={styles}>
+                    {char}
+                  </span>
+                );
               })}
             </div>
             <div className="input-area">
-              {tData.error && (
-                <span>Not the correct character</span>
-              )}
+              {tData.error && <span>{tData.error}</span>}
               <input
                 value={tData.value}
-                onChange={(e) => handleTyping(e.target.value)}
+                onChange={(e) => dispatch(handleTyping(e.target.value))}
               />
             </div>
           </>
