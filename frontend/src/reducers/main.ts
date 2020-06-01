@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import TypingReducer, { TData } from "./typing_reducer";
+import TypingReducer, { TData, TextData } from "./typing_reducer";
 
 export type Action = {
   payload?: any;
@@ -8,6 +8,8 @@ export type Action = {
 
 export declare namespace ReduxStore {
   export type TypingData = TData;
+
+  export type TxtData = TextData;
 
   export type State = {
     typing: TypingData;

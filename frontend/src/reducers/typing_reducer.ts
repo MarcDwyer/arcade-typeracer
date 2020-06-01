@@ -1,24 +1,32 @@
-import { Character } from "../util";
+import { Character, TimeResults } from "../util";
 import { Action } from "./main";
 
 export type TData = {
   currIndex: number;
   error: string | null;
   value: string;
-  typing_text: Character[] | null;
+  textData: TextData | null;
   completed: boolean;
+  timer: TimeResults | null;
+};
+export type TextData = {
+  totalWords: number;
+  text: Character[];
 };
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
-  SET_TYPING = Symbol();
+  SET_TYPING = Symbol(),
+  SET_TIMER = Symbol(),
+  COMPLETE = Symbol();
 
 const initState: TData = {
   error: null,
   currIndex: 0,
-  typing_text: null,
+  textData: null,
   value: "",
   completed: false,
+  timer: null,
 };
 
 function TypingReducer(state: TData = initState, { type, payload }: Action) {
@@ -28,7 +36,11 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
     case SET_ERROR:
       return { ...state, error: payload };
     case SET_TYPING:
-      return { ...state, typing_text: payload as Character[] };
+      return { ...state, textData: payload as TextData };
+    case SET_TIMER:
+      return { ...state, timer: payload };
+    case COMPLETE:
+      return { ...state, completed: true, timer: null };
     default:
       return state;
   }
