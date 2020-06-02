@@ -9,8 +9,15 @@
   .inner-div {
     background-color: #0c0c0c;
     width: 55%;
+    display: flex;
+    flex-direction: column;
     margin: auto;
     padding: 15px 15px;
+
+    button {
+      margin: auto;
+      width: 250px;
+    }
   }
   .input-area {
     display: flex;

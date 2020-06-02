@@ -1,4 +1,4 @@
-import { Character, TimeResults } from "../util";
+import { Character } from "../util";
 import { Action } from "./main";
 
 export type TData = {
@@ -7,7 +7,6 @@ export type TData = {
   value: string;
   textData: TextData | null;
   completed: boolean;
-  timer: TimeResults | null;
 };
 export type TextData = {
   totalWords: number;
@@ -17,7 +16,6 @@ export type TextData = {
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol(),
-  SET_TIMER = Symbol(),
   COMPLETE = Symbol();
 
 const initState: TData = {
@@ -26,7 +24,6 @@ const initState: TData = {
   textData: null,
   value: "",
   completed: false,
-  timer: null,
 };
 
 function TypingReducer(state: TData = initState, { type, payload }: Action) {
@@ -37,8 +34,6 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
       return { ...state, error: payload };
     case SET_TYPING:
       return { ...state, textData: payload as TextData };
-    case SET_TIMER:
-      return { ...state, timer: payload };
     case COMPLETE:
       return { ...state, completed: true, timer: null };
     default:
