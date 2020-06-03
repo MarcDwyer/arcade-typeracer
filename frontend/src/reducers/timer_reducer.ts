@@ -7,7 +7,7 @@ export const SET_TIMER = Symbol();
 
 export function TimerReducer(
   state: TimeState = null,
-  { type, payload }: Action
+  { type, payload }: Action,
 ) {
   switch (type) {
     case SET_TIMER:

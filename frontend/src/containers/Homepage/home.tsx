@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import { ModeLink } from "../../styled-components/buttons";
 import { Theme } from "../../themes/theme_colors.";

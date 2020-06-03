@@ -1,6 +1,12 @@
 import { ReduxStore } from "../reducers/main";
 import { Dispatch } from "redux";
-import { INC_INDEX, SET_ERROR } from "../reducers/typing_reducer";
+import {
+  INC_INDEX,
+  SET_ERROR,
+  SET_TYPING,
+  CHANGE_STATUS,
+} from "../reducers/typing_reducer";
+import { typeText } from "../typing_text";
 
 type GetState = () => ReduxStore.State;
 
@@ -32,5 +38,24 @@ export function handleTyping(char: string) {
         textData,
       },
     });
+  };
+}
+
+export function setStatus(status: string) {
+  return {
+    type: CHANGE_STATUS,
+    payload: {
+      mode: "single",
+      currStatus: status,
+    },
+  };
+}
+
+export function loadTyping() {
+  const selected = typeText.tutorial;
+
+  return {
+    type: SET_TYPING,
+    payload: selected,
   };
 }
