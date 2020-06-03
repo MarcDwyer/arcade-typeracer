@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { loadTyping } from "../../actions/typing_actions";
 import { setTime } from "../../actions/timer_actions";
 
 import { ReduxStore } from "../../reducers/main";
@@ -12,12 +11,6 @@ export default function SinglePlayer() {
   const [tData, timer] = useSelector((
     store: ReduxStore.State,
   ) => [store.typing, store.timer]);
-
-  useEffect(() => {
-    dispatch(loadTyping("single"));
-  }, []);
-
-  console.log(timer);
 
   return (
     <div className="single-player">

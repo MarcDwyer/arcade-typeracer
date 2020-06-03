@@ -3,6 +3,7 @@ import React from "react";
 import { ModeLink } from "../../styled-components/buttons";
 import { Theme } from "../../themes/theme_colors.";
 import "./home.scss";
+import { RouteModes } from "../../App";
 
 type MyLinks = {
   path: string;
@@ -10,15 +11,19 @@ type MyLinks = {
 };
 export default function Homepage() {
   const links: MyLinks[] = [
-    { path: "/single", text: "Single Player" },
-    { path: "/multi", text: "Multi Player" },
+    { path: `/${RouteModes.single}`, text: "Single Player" },
+    { path: `/${RouteModes.multi}`, text: "Multi Player" },
   ];
 
   return (
     <div className="homepage">
       <div className="links">
         {links.map((link, i) => (
-          <ModeLink key={i} to={link.path} bordercolor={Theme.btnColor}>
+          <ModeLink
+            key={i}
+            to={link.path}
+            bordercolor={Theme.btnColor}
+          >
             {link.text}
           </ModeLink>
         ))}

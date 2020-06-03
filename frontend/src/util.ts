@@ -1,3 +1,5 @@
+import { RouteModes } from "./App";
+
 export type Character = {
   completed: boolean;
   char: string;
@@ -43,3 +45,20 @@ export const getTime = (futureTime: number): TimeResults | null => {
 
   return [hours, minutes, seconds];
 };
+
+/**
+ * 
+ * @param route Is the params given to ModeHandler
+ * @returns a boolean that returns true if route is valid
+ */
+export function validRouteMode(route: string): boolean {
+  let isValid = false;
+
+  for (const mode of Object.values(RouteModes)) {
+    if (mode === route) {
+      isValid = true;
+      break;
+    }
+  }
+  return isValid;
+}

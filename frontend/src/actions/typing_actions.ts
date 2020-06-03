@@ -7,6 +7,7 @@ import {
   Phases,
 } from "../reducers/typing_reducer";
 import { typeText } from "../typing_text";
+import { validRouteMode } from "../util";
 
 export type GetState = () => ReduxStore.State;
 
@@ -41,16 +42,15 @@ export function handleTyping(char: string) {
   };
 }
 
-export function loadTyping(mode: string) {
+export function loadTyping(route: string) {
   const selected = typeText.tutorial;
-
   return {
     type: SET_TYPING,
     payload: {
       selected,
       status: {
-        mode,
-        phase: "loaded",
+        route,
+        phase: Phases.loaded,
       },
     },
   };
