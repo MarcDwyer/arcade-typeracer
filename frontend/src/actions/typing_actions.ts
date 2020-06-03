@@ -4,17 +4,17 @@ import {
   INC_INDEX,
   SET_ERROR,
   SET_TYPING,
-  CHANGE_STATUS,
+  Phases,
 } from "../reducers/typing_reducer";
 import { typeText } from "../typing_text";
 
-type GetState = () => ReduxStore.State;
+export type GetState = () => ReduxStore.State;
 
 export function handleTyping(char: string) {
   char = char[char.length - 1];
   return (dispatch: Dispatch, getState: GetState) => {
     const typing = getState().typing;
-    if (typing.completed) {
+    if (typing.status.phase === Phases.complete) {
       return;
     }
     let textData = typing.textData;
@@ -41,21 +41,17 @@ export function handleTyping(char: string) {
   };
 }
 
-export function setStatus(status: string) {
-  return {
-    type: CHANGE_STATUS,
-    payload: {
-      mode: "single",
-      currStatus: status,
-    },
-  };
-}
-
-export function loadTyping() {
+export function loadTyping(mode: string) {
   const selected = typeText.tutorial;
 
   return {
     type: SET_TYPING,
-    payload: selected,
+    payload: {
+      selected,
+      status: {
+        mode,
+        phase: "loaded",
+      },
+    },
   };
 }

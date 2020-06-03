@@ -3,7 +3,8 @@ import { Action } from "./main";
 
 export type TimeState = TimeResults | null;
 
-export const SET_TIMER = Symbol();
+export const SET_TIMER = Symbol(),
+  END_TIMER = Symbol();
 
 export function TimerReducer(
   state: TimeState = null,
@@ -12,6 +13,8 @@ export function TimerReducer(
   switch (type) {
     case SET_TIMER:
       return payload as TimeResults;
+    case END_TIMER:
+      return null;
     default:
       return state;
   }

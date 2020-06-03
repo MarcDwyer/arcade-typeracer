@@ -6,12 +6,12 @@ export type TextData = {
   text: Character[];
 };
 
-export type Statuses = "start" | "waiting" | "loaded";
+export type Statuses = "start" | "waiting" | "loaded" | "complete";
 
 export type Mode = "single" | "multi";
 
-export type Status = {
-  currStatus: Statuses;
+export type StatusType = {
+  phase: Statuses;
   mode: Mode | null;
 };
 export type TData = {
@@ -19,14 +19,14 @@ export type TData = {
   error: string | null;
   value: string;
   textData: TextData | null;
-  completed: boolean;
-  status: Status;
+  status: StatusType;
 };
-export const Status = {
-  start: "start",
-  waiting: "waiting",
-  loaded: "loaded",
-};
+export enum Phases {
+  start = "start",
+  waiting = "waiting",
+  loaded = "loaded",
+  complete = "complete",
+}
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
@@ -39,10 +39,9 @@ const initState: TData = {
   currIndex: 0,
   textData: null,
   value: "",
-  completed: false,
   status: {
     mode: null,
-    currStatus: "waiting",
+    phase: "waiting",
   },
 };
 
@@ -53,9 +52,12 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
     case SET_ERROR:
       return { ...state, error: payload };
     case SET_TYPING:
-      return { ...state, textData: payload as TextData };
+      return {
+        ...state,
+        ...payload,
+      };
     case COMPLETE:
-      return { ...state, completed: true, timer: null };
+      return { ...state, status: { ...state.status, phase: Phases.complete } };
     case CHANGE_STATUS:
       return { ...state, status: payload };
     default:

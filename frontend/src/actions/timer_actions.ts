@@ -1,25 +1,32 @@
-import { getTime } from "../util";
+import { SET_TIMER } from "../reducers/timer_reducer";
 import { Dispatch } from "redux";
+import { getTime } from "../util";
 import { COMPLETE } from "../reducers/typing_reducer";
 
-// export const setTimer = (time: number) => (dispatch: Dispatch) => {
-//   time = time * 1000;
-//   const futureTime = Date.now() + time;
-//   let timer: undefined | number;
-//   const initTimer = () => {
-//     const timeRes = getTime(futureTime);
-//     if (timeRes.join("") === "000") {
-//       dispatch({
-//         type: COMPLETE,
-//       });
-//       clearInterval(timer);
-//       return;
-//     }
-//     dispatch({
-//       type: SET_TIMER,
-//       payload: timeRes,
-//     });
-//   };
-//   initTimer();
-//   timer = setInterval(initTimer, 1000);
-// };
+/**
+ * 
+ * @param time time should be in seconds, it is then converted to the futuretime in milliseconds
+ * @returns in milliseconds
+ */
+export const setTime = (time: number) => {
+  time = time * 1000;
+  return function (dispatch: Dispatch) {
+    const futureTime = Date.now() + time;
+    let interval: undefined | number;
+
+    const initTimer = () => {
+      const time = getTime(futureTime);
+      if (!time) {
+        clearInterval(interval);
+        dispatch({
+          type: COMPLETE,
+        });
+      }
+      dispatch({
+        type: SET_TIMER,
+        payload: time,
+      });
+    };
+    interval = setInterval(initTimer, 1000);
+  };
+};

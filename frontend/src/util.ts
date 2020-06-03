@@ -25,18 +25,18 @@ export type TimeResults = [number, number, number];
 
 /**
  * @param {time}
- * time should be in milliseconds
+ * Should be in milliseconds and should be the countdown from the future
  * @returns getTime returns the time in [hours, minutes, seconds]
  */
-export const getTime = (futureTime: number): TimeResults => {
+export const getTime = (futureTime: number): TimeResults | null => {
   const now = Date.now();
   if (now >= futureTime) {
-    return [0, 0, 0];
+    return null;
   }
   const distance = futureTime - now;
 
   const hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
     ),
     minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
     seconds = Math.floor((distance % (1000 * 60)) / 1000);
