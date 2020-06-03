@@ -8,10 +8,6 @@ import { Theme } from "./themes/theme_colors.";
 
 import "./App.scss";
 
-export enum RouteModes {
-  single = "single",
-  multi = "multi",
-}
 // Number of words in text / time taken to complete
 function App() {
   return (

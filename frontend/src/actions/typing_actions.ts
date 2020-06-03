@@ -4,10 +4,10 @@ import {
   INC_INDEX,
   SET_ERROR,
   SET_TYPING,
-  Phases,
+  SET_COUNTDOWN,
 } from "../reducers/typing_reducer";
+import { Phases } from "../enums";
 import { typeText } from "../typing_text";
-import { validRouteMode } from "../util";
 
 export type GetState = () => ReduxStore.State;
 
@@ -42,14 +42,29 @@ export function handleTyping(char: string) {
   };
 }
 
-export function loadTyping(route: string) {
+/**
+ *
+ * @param time time should be in seconds, it is then converted to the futuretime in milliseconds
+ * @param desiredPhase whether it be prepare
+ * @returns in milliseconds
+ */
+type DesiredPhase = Phases.prepare | Phases.start;
+
+export function setTimer(time: number, desiredPhase: DesiredPhase) {
+  return {
+    type: SET_COUNTDOWN,
+    payload: time * 1000 + Date.now(),
+  };
+}
+
+export function loadTyping(mode: string) {
   const selected = typeText.tutorial;
   return {
     type: SET_TYPING,
     payload: {
       selected,
       status: {
-        route,
+        mode,
         phase: Phases.loaded,
       },
     },

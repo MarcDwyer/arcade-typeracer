@@ -1,12 +1,13 @@
 import { Character } from "../util";
 import { Action } from "./main";
+import { Phases } from "../enums";
 
 export type TextData = {
   totalWords: number;
   text: Character[];
 };
 
-export type Statuses = "start" | "waiting" | "loaded" | "complete";
+export type Statuses = "start" | "prepare" | "loaded" | "waiting" | "complete";
 
 export type Mode = "single" | "multi";
 
@@ -19,26 +20,23 @@ export type TData = {
   error: string | null;
   value: string;
   textData: TextData | null;
+  countdown: number | null;
   status: StatusType;
 };
-export enum Phases {
-  start = "start",
-  waiting = "waiting",
-  loaded = "loaded",
-  complete = "complete",
-}
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol(),
   COMPLETE = Symbol(),
-  CHANGE_STATUS = Symbol();
+  CHANGE_STATUS = Symbol(),
+  SET_COUNTDOWN = Symbol();
 
 const initState: TData = {
   error: null,
   currIndex: 0,
   textData: null,
   value: "",
+  countdown: null,
   status: {
     mode: null,
     phase: "waiting",
@@ -58,8 +56,10 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
       };
     case COMPLETE:
       return { ...state, status: { ...state.status, phase: Phases.complete } };
+    case SET_COUNTDOWN:
+      return { ...state, countdown: payload };
     case CHANGE_STATUS:
-      return { ...state, status: payload };
+      return { ...state, status: { ...state.status, phase: payload } };
     default:
       return state;
   }

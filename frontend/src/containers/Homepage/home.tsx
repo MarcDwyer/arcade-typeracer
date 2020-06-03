@@ -3,7 +3,7 @@ import React from "react";
 import { ModeLink } from "../../styled-components/buttons";
 import { Theme } from "../../themes/theme_colors.";
 import "./home.scss";
-import { RouteModes } from "../../App";
+import { RouteModes } from "../../enums";
 
 type MyLinks = {
   path: string;

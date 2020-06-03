@@ -1,4 +1,4 @@
-import { RouteModes } from "./App";
+import { RouteModes } from "./enums";
 
 export type Character = {
   completed: boolean;

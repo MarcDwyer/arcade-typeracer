@@ -2,21 +2,28 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 
 import SinglePlayer from "../SinglePlayer/single_player";
-import { RouteModes } from "../../App";
-import { useDispatch } from "react-redux";
+import Countdown from "react-countdown";
+
+import { RouteModes } from "../../enums";
+import { useDispatch, useSelector } from "react-redux";
 import { loadTyping } from "../../actions/typing_actions";
 import { validRouteMode } from "../../util";
+import { ReduxStore } from "../../reducers/main";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
+  const countdown = useSelector(
+    (store: ReduxStore.State) => store.typing.countdown
+  );
 
   useEffect(() => {
     if (!validRouteMode(mode)) return;
     dispatch(loadTyping(mode));
   }, []);
   return (
-    <React.Fragment>
+    <div className="mode-handler">
+      {countdown && <Countdown date={countdown} />}
       {(() => {
         switch (mode) {
           case RouteModes.single:
@@ -27,7 +34,7 @@ function ModeHandler() {
             return <span>Path not found</span>;
         }
       })()}
-    </React.Fragment>
+    </div>
   );
 }
 
