@@ -14,5 +14,5 @@ Play by yourself! Become the fastest, greatest typer in the world!
 
 ## Multi Player
 
-Read to test your awesome insane typing skills that you've gained from
-Single Plater? Now stomp noobs on Multi-Player!
+Ready to test your awesome insane typing skills that you've gained from
+Single Player? Now stomp noobs on Multi-Player!
