@@ -5,6 +5,8 @@ import {
   SET_ERROR,
   SET_TYPING,
   SET_COUNTDOWN,
+  CHANGE_STATUS,
+  Statuses,
 } from "../reducers/typing_reducer";
 import { Phases } from "../enums";
 import { typeText } from "../typing_text";
@@ -42,18 +44,13 @@ export function handleTyping(char: string) {
   };
 }
 
-/**
- *
- * @param time time should be in seconds, it is then converted to the futuretime in milliseconds
- * @param desiredPhase whether it be prepare
- * @returns in milliseconds
- */
-type DesiredPhase = Phases.prepare | Phases.start;
-
-export function setTimer(time: number, desiredPhase: DesiredPhase) {
+export function setTimer(time: number, phase: Statuses) {
   return {
     type: SET_COUNTDOWN,
-    payload: time * 1000 + Date.now(),
+    payload: {
+      countdown: time * 1000 + Date.now(),
+      phase,
+    },
   };
 }
 
@@ -68,5 +65,18 @@ export function loadTyping(mode: string) {
         phase: Phases.loaded,
       },
     },
+  };
+}
+
+export function handleCountEnd() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const phase = getState().typing.status.phase;
+    const newPhase =
+      phase === Phases.countdown ? Phases.start : Phases.complete;
+    console.log(phase, newPhase);
+    dispatch({
+      type: CHANGE_STATUS,
+      payload: newPhase,
+    });
   };
 }

@@ -6,7 +6,7 @@ import Countdown from "react-countdown";
 
 import { RouteModes } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
-import { loadTyping } from "../../actions/typing_actions";
+import { loadTyping, handleCountEnd } from "../../actions/typing_actions";
 import { validRouteMode } from "../../util";
 import { ReduxStore } from "../../reducers/main";
 
@@ -21,9 +21,15 @@ function ModeHandler() {
     if (!validRouteMode(mode)) return;
     dispatch(loadTyping(mode));
   }, []);
+  console.log(countdown);
   return (
     <div className="mode-handler">
-      {countdown && <Countdown date={countdown} />}
+      {countdown && (
+        <Countdown
+          date={countdown}
+          onComplete={() => dispatch(handleCountEnd())}
+        />
+      )}
       {(() => {
         switch (mode) {
           case RouteModes.single:

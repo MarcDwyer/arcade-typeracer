@@ -12,15 +12,13 @@ export default function SinglePlayer() {
     Boolean(store.typing.countdown),
   ]);
 
-  console.log(isTimer);
   return (
     <div className="single-player">
       {(() => {
-        console.log(status);
         switch (status.phase) {
           case Phases.loaded:
             return (
-              <button onClick={() => dispatch(setTimer(15, Phases.prepare))}>
+              <button onClick={() => dispatch(setTimer(15, Phases.countdown))}>
                 Start
               </button>
             );
@@ -31,6 +29,8 @@ export default function SinglePlayer() {
             return;
           case Phases.complete:
             return <span>You have completed the race!</span>;
+          case Phases.countdown:
+            return <span>Get ready!</span>;
           default:
             return <span>Phase could not be determined</span>;
         }

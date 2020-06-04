@@ -7,7 +7,13 @@ export type TextData = {
   text: Character[];
 };
 
-export type Statuses = "start" | "prepare" | "loaded" | "waiting" | "complete";
+export type Statuses =
+  | "start"
+  | "prepare"
+  | "loaded"
+  | "waiting"
+  | "complete"
+  | "countdown";
 
 export type Mode = "single" | "multi";
 
@@ -57,9 +63,18 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
     case COMPLETE:
       return { ...state, status: { ...state.status, phase: Phases.complete } };
     case SET_COUNTDOWN:
-      return { ...state, countdown: payload };
+      return {
+        ...state,
+        countdown: payload.countdown,
+        status: { ...state.status, phase: payload.phase },
+      };
     case CHANGE_STATUS:
-      return { ...state, status: { ...state.status, phase: payload } };
+      console.log(payload);
+      return {
+        ...state,
+        countdown: null,
+        status: { ...state.status, phase: payload },
+      };
     default:
       return state;
   }
