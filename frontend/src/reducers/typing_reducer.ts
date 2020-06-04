@@ -7,7 +7,7 @@ export type TextData = {
   text: Character[];
 };
 
-export type Statuses =
+export type PhaseTypes =
   | "start"
   | "prepare"
   | "loaded"
@@ -18,7 +18,7 @@ export type Statuses =
 export type Mode = "single" | "multi";
 
 export type StatusType = {
-  phase: Statuses;
+  phase: PhaseTypes;
   mode: Mode | null;
 };
 export type TData = {

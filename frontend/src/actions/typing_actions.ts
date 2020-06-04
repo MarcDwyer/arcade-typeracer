@@ -6,7 +6,7 @@ import {
   SET_TYPING,
   SET_COUNTDOWN,
   CHANGE_STATUS,
-  Statuses,
+  PhaseTypes,
 } from "../reducers/typing_reducer";
 import { Phases } from "../enums";
 import { typeText } from "../typing_text";
@@ -44,7 +44,7 @@ export function handleTyping(char: string) {
   };
 }
 
-export function setTimer(time: number, phase: Statuses) {
+export function setTimer(time: number, phase: PhaseTypes) {
   return {
     type: SET_COUNTDOWN,
     payload: {
