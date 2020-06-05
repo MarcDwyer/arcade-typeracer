@@ -38,7 +38,7 @@ function TypingReducer(
     case SET_TYPING:
       return {
         ...state,
-        text: payload.text,
+        text: payload,
       };
     default:
       return state;

@@ -16,7 +16,7 @@ const initStatus: StatusState = {
   mode: null,
 };
 
-const SET_STATUS = Symbol(),
+export const CHANGE_PHASE = Symbol(),
   SET_MODE = Symbol();
 
 export default function StatusReduer(
@@ -24,8 +24,8 @@ export default function StatusReduer(
   { type, payload }: Action,
 ) {
   switch (type) {
-    case SET_STATUS:
-      return { ...state, status: payload };
+    case CHANGE_PHASE:
+      return { ...state, phase: payload };
     case SET_MODE:
       return { ...state, mode: payload };
     default:

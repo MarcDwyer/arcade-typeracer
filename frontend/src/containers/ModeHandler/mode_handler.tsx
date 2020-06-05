@@ -9,39 +9,49 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   loadTyping,
 } from "../../actions/typing_actions";
-import { validRouteMode } from "../../util";
 import { ReduxStore } from "../../reducers/main";
 import { setCountdown, clearCountdown } from "../../actions/countdown_actions";
+import { changePhase } from "../../actions/status_actions";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [countdown, phase] = useSelector(
+  const [countdown, phase, text] = useSelector(
     (
       store: ReduxStore.State,
-    ) => [store.countdown, store.status.phase],
+    ) => [store.countdown, store.status.phase, store.textData.text],
   );
 
-  useEffect(() => {
-    if (!validRouteMode(mode)) return;
-    dispatch(loadTyping());
-  }, []);
+  const typingTime = 20;
 
   useEffect(() => {
-    console.log(phase);
     switch (phase) {
+      case Phases.waiting:
+        dispatch(loadTyping());
+        break;
       case Phases.typing:
-        dispatch(setCountdown(120));
+        dispatch(setCountdown(typingTime));
     }
   }, [phase]);
 
-  console.log(countdown);
+  useEffect(() => {
+    if (phase === Phases.waiting && text) {
+      dispatch(changePhase(Phases.loaded));
+    }
+  }, [phase, text]);
+
   return (
     <div className="mode-handler">
       {countdown && (
         <Countdown
           date={countdown}
-          onComplete={() => dispatch(clearCountdown())}
+          onComplete={() => {
+            dispatch(clearCountdown());
+            const newPhase = phase === Phases.countdown
+              ? Phases.typing
+              : Phases.complete;
+            dispatch(changePhase(newPhase));
+          }}
         />
       )}
       {(() => {

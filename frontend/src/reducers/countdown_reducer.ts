@@ -12,6 +12,8 @@ export default function CountDownReducer(
   switch (type) {
     case SET_COUNTDOWN:
       return payload as CountDownState;
+    case CLEAR_COUNTDOWN:
+      return null;
     default:
       return state;
   }

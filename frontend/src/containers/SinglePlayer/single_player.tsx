@@ -6,6 +6,7 @@ import { Phases } from "../../enums";
 import { setCountdown } from "../../actions/countdown_actions";
 
 import TypingInterface from "../TypingInterface/typing_interface";
+import { changePhase } from "../../actions/status_actions";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
@@ -20,10 +21,17 @@ export default function SinglePlayer() {
         switch (phase) {
           case Phases.loaded:
             return (
-              <button onClick={() => dispatch(setCountdown(8))}>
+              <button
+                onClick={() => {
+                  dispatch(changePhase(Phases.countdown));
+                  dispatch(setCountdown(8));
+                }}
+              >
                 Start
               </button>
             );
+          case Phases.waiting:
+            return <span>Fetching typing data...</span>;
           case Phases.countdown:
             return <span>Get Ready!</span>;
           case Phases.complete:

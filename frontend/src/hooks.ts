@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { getTime, TimeResults } from "./util";
+import { Dispatch } from "redux";
+import { PhaseTypes } from "./reducers/status_reducer";
+import { loadTyping } from "./actions/typing_actions";
+import { setCountdown } from "./actions/countdown_actions";
+import { Phases } from "./enums";
 
 export const useTimer = (time: number | null) => {
   const [timer, setTimer] = useState<TimeResults | null>(null);
