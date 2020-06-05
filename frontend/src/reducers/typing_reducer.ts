@@ -2,18 +2,13 @@ import { Character } from "../util";
 import { Action } from "./main";
 import { Phases } from "../enums";
 
-export type TextData = {
-  totalWords: number;
-  text: Character[];
-};
-
 export type PhaseTypes =
   | "start"
-  | "prepare"
   | "loaded"
   | "waiting"
   | "complete"
-  | "countdown";
+  | "countdown"
+  | "typing";
 
 export type Mode = "single" | "multi";
 
@@ -22,12 +17,16 @@ export type StatusType = {
   mode: Mode | null;
 };
 export type TData = {
-  currIndex: number;
-  error: string | null;
-  value: string;
-  textData: TextData | null;
+  textData: TextData;
   countdown: number | null;
   status: StatusType;
+};
+export type TextData = {
+  text: Character[] | null;
+  wordCount: number;
+  error: string | null;
+  currIndex: number;
+  value: string;
 };
 
 export const INC_INDEX = Symbol(),
@@ -38,10 +37,13 @@ export const INC_INDEX = Symbol(),
   SET_COUNTDOWN = Symbol();
 
 const initState: TData = {
-  error: null,
-  currIndex: 0,
-  textData: null,
-  value: "",
+  textData: {
+    text: null,
+    wordCount: 0,
+    error: null,
+    currIndex: 0,
+    value: "",
+  },
   countdown: null,
   status: {
     mode: null,
@@ -49,16 +51,20 @@ const initState: TData = {
   },
 };
 
-function TypingReducer(state: TData = initState, { type, payload }: Action) {
+function TypingReducer(
+  state: TData = initState,
+  { type, payload }: Action,
+) {
   switch (type) {
     case INC_INDEX:
-      return payload;
+      return { ...state, ...payload };
     case SET_ERROR:
-      return { ...state, error: payload };
+      return { ...state, textData: { ...state.textData, error: payload } };
     case SET_TYPING:
       return {
         ...state,
-        ...payload,
+        status: payload.status,
+        textData: { ...state.textData, text: payload.text },
       };
     case COMPLETE:
       return { ...state, status: { ...state.status, phase: Phases.complete } };
@@ -69,7 +75,6 @@ function TypingReducer(state: TData = initState, { type, payload }: Action) {
         status: { ...state.status, phase: payload.phase },
       };
     case CHANGE_STATUS:
-      console.log(payload);
       return {
         ...state,
         countdown: null,

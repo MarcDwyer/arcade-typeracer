@@ -6,8 +6,8 @@ export enum RouteModes {
 export enum Phases {
   start = "start",
   waiting = "waiting",
-  prepare = "prepare",
   loaded = "loaded",
   complete = "complete",
   countdown = "countdown",
+  typing = "typing",
 }

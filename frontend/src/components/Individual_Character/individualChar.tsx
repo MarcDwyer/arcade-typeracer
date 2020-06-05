@@ -4,7 +4,6 @@ import { Theme } from "../../themes/theme_colors.";
 
 type Props = {
   char: Character;
-  index: number;
 };
 function handleStyles(char: Character) {
   let styles = {};
@@ -16,10 +15,10 @@ function handleStyles(char: Character) {
   }
   return styles;
 }
-function IndividualCharacter({ char, index }: Props) {
+function IndividualCharacter({ char }: Props) {
   const styles = handleStyles(char);
   return (
-    <span key={index} style={styles}>
+    <span style={styles}>
       {char.char}
     </span>
   );
