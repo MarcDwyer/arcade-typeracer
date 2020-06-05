@@ -4,9 +4,6 @@ import {
   INC_INDEX,
   SET_ERROR,
   SET_TYPING,
-  SET_COUNTDOWN,
-  CHANGE_STATUS,
-  PhaseTypes,
 } from "../reducers/typing_reducer";
 import { Phases } from "../enums";
 import { typeText } from "../typing_text";
@@ -17,8 +14,7 @@ export type GetState = () => ReduxStore.State;
 export function handleTyping(char: string) {
   char = char[char.length - 1];
   return (dispatch: Dispatch, getState: GetState) => {
-    const typing = getState().typing;
-    const { textData, status } = typing;
+    const { textData, status } = getState();
     if (status.phase === Phases.complete) {
       return;
     }
@@ -48,39 +44,12 @@ export function handleTyping(char: string) {
   };
 }
 
-export function setTimer(time: number, phase: PhaseTypes) {
-  return {
-    type: SET_COUNTDOWN,
-    payload: {
-      countdown: time * 1000 + Date.now(),
-      phase,
-    },
-  };
-}
+// This will most likely be async at some point
 
-export function loadTyping(mode: string) {
+export function loadTyping() {
   const selected = typeText.tutorial;
   return {
     type: SET_TYPING,
-    payload: {
-      text: transformChar(selected),
-      status: {
-        mode,
-        phase: Phases.loaded,
-      },
-    },
-  };
-}
-
-export function handleCountEnd() {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const phase = getState().typing.status.phase;
-    const newPhase = phase === Phases.countdown
-      ? Phases.typing
-      : Phases.complete;
-    dispatch({
-      type: CHANGE_STATUS,
-      payload: newPhase,
-    });
+    payload: transformChar(selected),
   };
 }
