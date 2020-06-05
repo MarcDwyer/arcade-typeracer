@@ -31,8 +31,8 @@ function ModeHandler() {
   useEffect(() => {
     console.log(phase);
     switch (phase) {
-      case Phases.start:
-        dispatch(setTimer(120, Phases.start));
+      case Phases.typing:
+        dispatch(setTimer(120, Phases.typing));
     }
   }, [phase]);
 

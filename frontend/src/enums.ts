@@ -4,7 +4,6 @@ export enum RouteModes {
 }
 
 export enum Phases {
-  start = "start",
   waiting = "waiting",
   loaded = "loaded",
   complete = "complete",
