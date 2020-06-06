@@ -5,7 +5,6 @@ import {
   SET_ERROR,
   SET_TYPING,
 } from "../reducers/typing_reducer";
-import { Phases } from "../enums";
 import { typeText } from "../typing_text";
 import { transformChar } from "../util";
 
@@ -14,31 +13,27 @@ export type GetState = () => ReduxStore.State;
 export function handleTyping(char: string) {
   char = char[char.length - 1];
   return (dispatch: Dispatch, getState: GetState) => {
-    const { textData, status } = getState();
-    if (status.phase === Phases.complete) {
+    const textData = getState().textData;
+    if (!textData.text) {
       return;
     }
-    if (!textData.text) return;
     const curr = textData.text[textData.currIndex];
-    console.log(curr, char);
     if (char !== curr.char) {
-      console.log("error");
       dispatch({ type: SET_ERROR, payload: "Incorrect character" });
       return;
     }
     textData.text[textData.currIndex].completed = true;
     const value = char === " " ? char : textData.value + char;
     const completed = textData.text.length - 1 === textData.currIndex;
+    console.log(completed);
     dispatch({
       type: INC_INDEX,
       payload: {
         error: false,
-        textData: {
-          ...textData,
-          currIndex: completed ? textData.currIndex : textData.currIndex + 1,
-          value,
-          completed,
-        },
+        currIndex: completed ? textData.currIndex : textData.currIndex + 1,
+        wordCount: char === " " ? textData.wordCount + 1 : textData.wordCount,
+        value,
+        completed,
       },
     });
   };

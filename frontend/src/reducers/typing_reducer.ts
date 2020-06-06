@@ -14,10 +14,6 @@ export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol();
 
-// TODO:
-// Consider splitting into 3 different pieces of state.
-// Although countdown and status rely on eachother somewhat.
-// Perhaps find a better way
 const initState: TextData = {
   text: null,
   wordCount: 0,
@@ -38,6 +34,7 @@ function TypingReducer(
     case SET_TYPING:
       return {
         ...state,
+        wordCount: 1,
         text: payload,
       };
     default:

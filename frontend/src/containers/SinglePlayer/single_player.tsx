@@ -37,7 +37,7 @@ export default function SinglePlayer() {
           case Phases.complete:
             return <span>You have completed the race!</span>;
           case Phases.typing:
-            return <TypingInterface textData={textData} />;
+            return <TypingInterface textData={textData} phase={phase} />;
           default:
             return <span>Phase could not be determined</span>;
         }
