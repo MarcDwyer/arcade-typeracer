@@ -17,6 +17,7 @@ export function handleTyping(char: string) {
   char = char[char.length - 1];
   return (dispatch: Dispatch, getState: GetState) => {
     const { text, currIndex, wordCount, value } = getState().textData;
+    const timer = getState().timer;
     if (!text) return;
 
     const curr = text[currIndex];
@@ -39,6 +40,14 @@ export function handleTyping(char: string) {
         return wordCount;
       }
     };
+    const wpm = () => {
+      if (completed && timer.countdown) {
+        const timeTaken = timer.duration - timer.countdown;
+        return (wordCount / timeTaken) * 100;
+      } else {
+        return null;
+      }
+    };
     if (completed) {
       dispatch({
         type: CHANGE_PHASE,
@@ -55,7 +64,7 @@ export function handleTyping(char: string) {
         currIndex: completed ? currIndex : currIndex + 1,
         wordCount: getWordCount(),
         value: newValue,
-        completedIn: null,
+        wpm: wpm(),
       },
     });
   };

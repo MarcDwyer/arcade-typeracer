@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 
 import SinglePlayer from "../SinglePlayer/single_player";
-import Results from "../../components/Results/results";
-import Countdown from "react-countdown";
+// import Results from "../../components/Results/results";
+// import Countdown from "react-countdown";
 
 import { RouteModes, Phases } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,29 +11,36 @@ import {
   loadTyping,
 } from "../../actions/typing_actions";
 import { ReduxStore } from "../../reducers/main";
-import { setCountdown, clearCountdown } from "../../actions/countdown_actions";
+import {
+  setCountdown,
+  setDuration,
+} from "../../actions/countdown_actions";
 import { changePhase } from "../../actions/status_actions";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [countdown, phase, textData] = useSelector(
+  const [timer, phase, textData] = useSelector(
     (
       store: ReduxStore.State,
-    ) => [store.countdown, store.status.phase, store.textData],
+    ) => [store.timer, store.status.phase, store.textData],
   );
 
-  const typingTime = 20;
+  const typingTime = 20,
+    coutnDownTime = 8;
 
   useEffect(() => {
+    console.log(phase);
     switch (phase) {
       case Phases.waiting:
         dispatch(loadTyping());
         break;
+      case Phases.countdown:
+        dispatch(setDuration(coutnDownTime));
       case Phases.complete:
         break;
       case Phases.typing:
-        dispatch(setCountdown(typingTime));
+        dispatch(setDuration(typingTime));
     }
   }, [phase]);
 
@@ -42,28 +49,19 @@ function ModeHandler() {
       dispatch(changePhase(Phases.loaded));
     }
   }, [phase, textData.text]);
-  // TODO
-  // Might need to create own timer to monitor time
+  useEffect(() => {
+    if (timer && timer.duration && !timer.countdown) {
+      dispatch(setCountdown());
+    }
+  }, [timer]);
+  console.log(textData);
   return (
     <div className="mode-handler">
-      {countdown && (
-        <Countdown
-          date={countdown}
-          onComplete={(t) => {
-            console.log(t);
-            dispatch(clearCountdown());
-            const newPhase = phase === Phases.countdown
-              ? Phases.typing
-              : Phases.complete;
-            dispatch(changePhase(newPhase));
-          }}
-        />
+      {timer && timer.countdown && (
+        <span>{timer.countdown}</span>
       )}
-      {phase === Phases.complete && (
-        <Results
-          wordCount={textData.wordCount}
-          seconds={textData.completedIn}
-        />
+      {textData.wpm && (
+        <span>{textData.wpm} wpm</span>
       )}
       {(() => {
         switch (mode) {

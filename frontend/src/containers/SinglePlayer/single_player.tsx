@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
 import { Phases } from "../../enums";
-import { setCountdown } from "../../actions/countdown_actions";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { changePhase } from "../../actions/status_actions";
@@ -23,7 +22,6 @@ export default function SinglePlayer() {
               <button
                 onClick={() => {
                   dispatch(changePhase(Phases.countdown));
-                  dispatch(setCountdown(8));
                 }}
               >
                 Start

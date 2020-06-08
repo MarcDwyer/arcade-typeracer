@@ -7,7 +7,7 @@ export type TextData = {
   error: string | null;
   currIndex: number;
   value: string;
-  completedIn: number;
+  wpm: number | null;
 };
 
 export const INC_INDEX = Symbol(),
@@ -20,7 +20,7 @@ const initState: TextData = {
   error: null,
   currIndex: 0,
   value: "",
-  completedIn: 0,
+  wpm: null,
 };
 
 function TypingReducer(

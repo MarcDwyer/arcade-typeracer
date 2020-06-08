@@ -37,13 +37,11 @@ export const getTime = (futureTime: number): TimeResults | null => {
   }
   const distance = futureTime - now;
 
-  const hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    ),
-    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-    seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  return [hours, minutes, seconds];
+  // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  return [0, minutes, seconds];
 };
 
 /**

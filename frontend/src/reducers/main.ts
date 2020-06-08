@@ -15,7 +15,7 @@ export declare namespace ReduxStore {
 
   export type State = {
     textData: TypingData;
-    countdown: CountdownState;
+    timer: CountdownState;
     status: StatusState;
   };
 }
@@ -23,5 +23,5 @@ export declare namespace ReduxStore {
 export default combineReducers({
   textData: TypingReducer,
   status: StatusReducer,
-  countdown: CountDownReducer,
+  timer: CountDownReducer,
 });
