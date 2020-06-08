@@ -5,7 +5,7 @@ import { ReduxStore } from "../../reducers/main";
 import { Phases } from "../../enums";
 import { setCountdown } from "../../actions/countdown_actions";
 
-import TypingInterface from "../TypingInterface/typing_interface";
+import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { changePhase } from "../../actions/status_actions";
 
 export default function SinglePlayer() {
@@ -14,7 +14,6 @@ export default function SinglePlayer() {
     store.status.phase,
     store.textData,
   ]);
-  console.log(phase);
   return (
     <div className="single-player">
       {(() => {

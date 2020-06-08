@@ -3,15 +3,15 @@ import { Action } from "./main";
 export const SET_COUNTDOWN = Symbol(),
   CLEAR_COUNTDOWN = Symbol();
 
-export type CountDownState = number | null;
+export type CountdownState = number | null;
 
 export default function CountDownReducer(
-  state: CountDownState = null,
+  state: CountdownState = null,
   { type, payload }: Action,
 ) {
   switch (type) {
     case SET_COUNTDOWN:
-      return payload as CountDownState;
+      return payload;
     case CLEAR_COUNTDOWN:
       return null;
     default:

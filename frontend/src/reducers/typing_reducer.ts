@@ -1,6 +1,5 @@
 import { Character } from "../util";
 import { Action } from "./main";
-import { Phases } from "../enums";
 
 export type TextData = {
   text: Character[] | null;
@@ -8,6 +7,7 @@ export type TextData = {
   error: string | null;
   currIndex: number;
   value: string;
+  completedIn: number;
 };
 
 export const INC_INDEX = Symbol(),
@@ -20,6 +20,7 @@ const initState: TextData = {
   error: null,
   currIndex: 0,
   value: "",
+  completedIn: 0,
 };
 
 function TypingReducer(
@@ -34,7 +35,7 @@ function TypingReducer(
     case SET_TYPING:
       return {
         ...state,
-        wordCount: 1,
+        wordCount: 0,
         text: payload,
       };
     default:

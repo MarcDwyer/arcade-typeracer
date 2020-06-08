@@ -8,7 +8,7 @@ import { Theme } from "./themes/theme_colors.";
 
 import "./App.scss";
 
-// Number of words in text / time taken to complete
+// Number of words typed / time taken to complete
 function App() {
   return (
     <div className="App">

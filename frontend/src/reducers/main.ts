@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import TypingReducer, { TextData } from "./typing_reducer";
-import CountDownReducer, { CountDownState } from "./countdown_reducer";
+import CountDownReducer, { CountdownState } from "./countdown_reducer";
 import StatusReducer, { StatusState } from "./status_reducer";
 
 export interface Action {
@@ -15,7 +15,7 @@ export declare namespace ReduxStore {
 
   export type State = {
     textData: TypingData;
-    countdown: CountDownState;
+    countdown: CountdownState;
     status: StatusState;
   };
 }

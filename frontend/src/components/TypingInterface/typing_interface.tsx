@@ -1,6 +1,6 @@
 import React from "react";
 
-import IndividualChar from "../../components/Individual_Character/individualChar";
+import IndividualChar from "../Individual_Character/individualChar";
 import { useDispatch } from "react-redux";
 import { handleTyping } from "../../actions/typing_actions";
 import { TextData } from "../../reducers/typing_reducer";
