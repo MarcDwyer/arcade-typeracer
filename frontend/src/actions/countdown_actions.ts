@@ -5,13 +5,10 @@ import {
   SET_DURATION,
 } from "../reducers/countdown_reducer";
 import { Dispatch } from "redux";
-import { GetState } from "./typing_actions";
 import { CHANGE_PHASE } from "../reducers/status_reducer";
 import { Phases } from "../enums";
-/**
- * 
- * @param duration amount of seconds for the timer
- */
+import { GetState } from "./action_types";
+
 export function setCountdown() {
   return (dispatch: Dispatch, getState: GetState) => {
     const initTimer = () => {

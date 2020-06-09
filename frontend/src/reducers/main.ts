@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import TypingReducer, { TextData } from "./typing_reducer";
 import CountDownReducer, { CountdownState } from "./countdown_reducer";
 import StatusReducer, { StatusState } from "./status_reducer";
+import SocketReducer from "./socket_reducer";
 
 export interface Action {
   payload: any;
@@ -24,4 +25,5 @@ export default combineReducers({
   textData: TypingReducer,
   status: StatusReducer,
   timer: CountDownReducer,
+  socket: SocketReducer,
 });

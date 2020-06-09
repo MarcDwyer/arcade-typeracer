@@ -1,7 +1,8 @@
 import { PhaseTypes, CHANGE_PHASE } from "../reducers/status_reducer";
 
 /**
- * Typically after an action is made, we want to change the phase of the game
+ * Changing the phase allows mode_handler to dispatch required actions
+ * It's a way of controlling the 3 reducers
  */
 export function changePhase(phase: PhaseTypes) {
   return {

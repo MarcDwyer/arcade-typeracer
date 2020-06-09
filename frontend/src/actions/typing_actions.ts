@@ -1,4 +1,3 @@
-import { ReduxStore } from "../reducers/main";
 import { Dispatch } from "redux";
 import {
   INC_INDEX,
@@ -10,8 +9,7 @@ import { typeText } from "../typing_text";
 import { transformChar } from "../util";
 import { CHANGE_PHASE } from "../reducers/status_reducer";
 import { Phases } from "../enums";
-
-export type GetState = () => ReduxStore.State;
+import { GetState } from "./action_types";
 
 export function handleTyping(char: string) {
   char = char[char.length - 1];
@@ -75,6 +73,7 @@ export function finalizeTyping() {
     });
   };
 }
+
 // This will most likely be async at some point
 
 export function loadTyping() {
