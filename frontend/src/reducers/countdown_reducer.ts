@@ -30,6 +30,7 @@ export default function CountDownReducer(
     case SET_DURATION:
       return { ...state, duration: payload };
     case CLEAR_COUNTDOWN:
+      console.log("clearing");
       if (state && state.interval) clearInterval(state.interval);
       return null;
     default:

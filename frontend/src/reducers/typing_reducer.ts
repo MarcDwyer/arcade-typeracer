@@ -12,7 +12,8 @@ export type TextData = {
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
-  SET_TYPING = Symbol();
+  SET_TYPING = Symbol(),
+  FINALIZE_TYPING = Symbol();
 
 const initState: TextData = {
   text: null,
@@ -38,6 +39,8 @@ function TypingReducer(
         wordCount: 0,
         text: payload,
       };
+    case FINALIZE_TYPING:
+      return { ...state, wpm: payload };
     default:
       return state;
   }

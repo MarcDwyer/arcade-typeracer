@@ -9,6 +9,7 @@ import { RouteModes, Phases } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loadTyping,
+  finalizeTyping,
 } from "../../actions/typing_actions";
 import { ReduxStore } from "../../reducers/main";
 import {
@@ -16,6 +17,7 @@ import {
   setDuration,
 } from "../../actions/countdown_actions";
 import { changePhase } from "../../actions/status_actions";
+import { CLEAR_COUNTDOWN } from "../../reducers/countdown_reducer";
 
 function ModeHandler() {
   const { mode } = useParams();
@@ -27,7 +29,7 @@ function ModeHandler() {
   );
 
   const typingTime = 20,
-    coutnDownTime = 8;
+    countDownTime = 8;
 
   useEffect(() => {
     console.log(phase);
@@ -36,11 +38,17 @@ function ModeHandler() {
         dispatch(loadTyping());
         break;
       case Phases.countdown:
-        dispatch(setDuration(coutnDownTime));
-      case Phases.complete:
+        dispatch(setDuration(countDownTime));
         break;
       case Phases.typing:
         dispatch(setDuration(typingTime));
+        break;
+      case Phases.complete:
+        dispatch(finalizeTyping());
+        if (timer && timer.duration) {
+          dispatch({ type: CLEAR_COUNTDOWN });
+        }
+        break;
     }
   }, [phase]);
 
@@ -54,7 +62,6 @@ function ModeHandler() {
       dispatch(setCountdown());
     }
   }, [timer]);
-  console.log(textData);
   return (
     <div className="mode-handler">
       {timer && timer.countdown && (

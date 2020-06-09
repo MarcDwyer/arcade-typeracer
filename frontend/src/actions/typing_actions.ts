@@ -4,12 +4,12 @@ import {
   INC_INDEX,
   SET_ERROR,
   SET_TYPING,
+  FINALIZE_TYPING,
 } from "../reducers/typing_reducer";
 import { typeText } from "../typing_text";
 import { transformChar } from "../util";
 import { CHANGE_PHASE } from "../reducers/status_reducer";
 import { Phases } from "../enums";
-import { CLEAR_COUNTDOWN } from "../reducers/countdown_reducer";
 
 export type GetState = () => ReduxStore.State;
 
@@ -40,36 +40,41 @@ export function handleTyping(char: string) {
         return wordCount;
       }
     };
-    const wpm = () => {
-      if (completed && timer.countdown) {
-        const timeTaken = timer.duration - timer.countdown;
-        return (wordCount / timeTaken) * 100;
-      } else {
-        return null;
-      }
-    };
+
     if (completed) {
       dispatch({
         type: CHANGE_PHASE,
         payload: Phases.complete,
       });
-      dispatch({
-        type: CLEAR_COUNTDOWN,
-      });
     }
     dispatch({
       type: INC_INDEX,
       payload: {
+        ...timer,
         error: false,
         currIndex: completed ? currIndex : currIndex + 1,
         wordCount: getWordCount(),
         value: newValue,
-        wpm: wpm(),
       },
     });
   };
 }
+export function finalizeTyping() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const { wordCount } = getState().textData;
+    const { duration, countdown } = getState().timer;
 
+    const wpm = () => {
+      if (!countdown) return 1337;
+      const timeTook = duration - countdown;
+      return (wordCount / timeTook) * 100;
+    };
+    dispatch({
+      type: FINALIZE_TYPING,
+      payload: wpm(),
+    });
+  };
+}
 // This will most likely be async at some point
 
 export function loadTyping() {
