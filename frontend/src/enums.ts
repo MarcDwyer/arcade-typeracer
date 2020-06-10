@@ -10,3 +10,7 @@ export enum Phases {
   countdown = "countdown",
   typing = "typing",
 }
+
+export enum PayloadTypes {
+  typing_text = "typingtext",
+}

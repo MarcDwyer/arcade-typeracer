@@ -5,71 +5,51 @@ import SinglePlayer from "../SinglePlayer/single_player";
 // import Results from "../../components/Results/results";
 // import Countdown from "react-countdown";
 
-import { RouteModes, Phases } from "../../enums";
+import { RouteModes, Phases, PayloadTypes } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loadTyping,
-  finalizeTyping,
-} from "../../actions/typing_actions";
+
 import { ReduxStore } from "../../reducers/main";
-import {
-  setCountdown,
-  setDuration,
-} from "../../actions/countdown_actions";
-import { changePhase } from "../../actions/status_actions";
-import { CLEAR_COUNTDOWN } from "../../reducers/countdown_reducer";
+import { finalizeTyping, setTimer } from "../../actions/game_actions";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [timer, phase, textData] = useSelector(
-    (
-      store: ReduxStore.State,
-    ) => [store.timer, store.status.phase, store.textData],
-  );
-
-  const typingTime = 20,
-    countDownTime = 8;
+  const [phase, timer, ws, wpm] = useSelector((
+    store: ReduxStore.State,
+  ) => [
+    store.gameData.status.phase,
+    store.gameData.timer,
+    store.socket,
+    store.gameData.textData.wpm,
+  ]);
 
   useEffect(() => {
-    console.log(phase);
     switch (phase) {
       case Phases.waiting:
-        dispatch(loadTyping());
-        break;
-      case Phases.countdown:
-        dispatch(setDuration(countDownTime));
-        break;
-      case Phases.typing:
-        dispatch(setDuration(typingTime));
-        break;
-      case Phases.complete:
-        dispatch(finalizeTyping());
-        if (timer && timer.duration) {
-          dispatch({ type: CLEAR_COUNTDOWN });
+        if (ws) {
+          ws.send(JSON.stringify({ type: PayloadTypes.typing_text }));
         }
-        break;
     }
-  }, [phase]);
+  }, [phase, ws]);
+  useEffect(() => {
+    if (phase === Phases.typing && !timer.countdown) {
+      dispatch(setTimer(22, Phases.typing));
+    }
+  }, [timer, phase]);
+  useEffect(() => {
+    if (phase === Phases.complete && !wpm) {
+      dispatch(finalizeTyping());
+    }
+  }, [phase, wpm]);
 
-  useEffect(() => {
-    if (phase === Phases.waiting && textData.text) {
-      dispatch(changePhase(Phases.loaded));
-    }
-  }, [phase, textData.text]);
-  useEffect(() => {
-    if (timer && timer.duration && !timer.countdown) {
-      dispatch(setCountdown());
-    }
-  }, [timer]);
+  const isWpm = typeof wpm === "number";
+
   return (
     <div className="mode-handler">
-      {timer && timer.countdown && (
+      {timer.countdown && (
         <span>{timer.countdown}</span>
       )}
-      {textData.wpm && (
-        <span>{textData.wpm} wpm</span>
-      )}
+      {isWpm && <span>{wpm} wpm</span>}
       {(() => {
         switch (mode) {
           case RouteModes.single:

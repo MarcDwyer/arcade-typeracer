@@ -2,9 +2,9 @@ import React from "react";
 
 import IndividualChar from "../Individual_Character/individualChar";
 import { useDispatch } from "react-redux";
-import { handleTyping } from "../../actions/typing_actions";
-import { TextData } from "../../reducers/typing_reducer";
-import { PhaseTypes } from "../../reducers/status_reducer";
+import { handleTyping } from "../../actions/game_actions";
+import { TextData } from "../../reducers/reducer_types";
+import { PhaseTypes } from "../../reducers/reducer_types";
 
 import "./typing_interface.scss";
 import { Phases } from "../../enums";

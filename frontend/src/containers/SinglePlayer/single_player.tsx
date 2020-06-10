@@ -5,13 +5,13 @@ import { ReduxStore } from "../../reducers/main";
 import { Phases } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
-import { changePhase } from "../../actions/status_actions";
+import { setTimer } from "../../actions/game_actions";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
   const [phase, textData] = useSelector((store: ReduxStore.State) => [
-    store.status.phase,
-    store.textData,
+    store.gameData.status.phase,
+    store.gameData.textData,
   ]);
   return (
     <div className="single-player">
@@ -21,7 +21,7 @@ export default function SinglePlayer() {
             return (
               <button
                 onClick={() => {
-                  dispatch(changePhase(Phases.countdown));
+                  dispatch(setTimer(8, Phases.countdown));
                 }}
               >
                 Start
