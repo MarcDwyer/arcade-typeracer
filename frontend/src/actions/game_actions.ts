@@ -28,23 +28,12 @@ export function handleTyping(char: string) {
     const newValue = char === " " ? char : value + char;
     const completed = text.length - 1 === currIndex;
 
-    const getWordCount = () => {
-      if (char === " " || completed) {
-        if (!wordCount) {
-          return 1;
-        } else {
-          return wordCount + 1;
-        }
-      } else {
-        return wordCount;
-      }
-    };
     dispatch({
       type: INC_INDEX,
       payload: {
         error: false,
         currIndex: completed ? currIndex : currIndex + 1,
-        wordCount: getWordCount(),
+        wordCount: curr.lastChar ? wordCount + 1 : wordCount,
         value: newValue,
       },
     });

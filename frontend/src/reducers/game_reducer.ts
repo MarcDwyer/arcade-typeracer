@@ -38,7 +38,8 @@ export const INC_INDEX = Symbol(),
   CHANGE_PHASE = Symbol(),
   CLEAR_COUNTDOWN = Symbol(),
   SET_COUNTDOWN = Symbol(),
-  UPDATE_COUNTDOWN = Symbol();
+  UPDATE_COUNTDOWN = Symbol(),
+  RESET_GAME = Symbol();
 
 function GameReducer(
   state: GameData = initState,
@@ -79,6 +80,8 @@ function GameReducer(
       };
     case CHANGE_PHASE:
       return { ...state, status: { ...state.status, phase: payload } };
+    case RESET_GAME:
+      return { ...initState };
     default:
       return state;
   }

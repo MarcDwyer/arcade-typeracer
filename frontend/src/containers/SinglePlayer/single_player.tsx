@@ -6,6 +6,7 @@ import { Phases } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { setTimer } from "../../actions/game_actions";
+import { RESET_GAME } from "../../reducers/game_reducer";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
@@ -32,7 +33,16 @@ export default function SinglePlayer() {
           case Phases.countdown:
             return <span>Get Ready!</span>;
           case Phases.complete:
-            return <span>You have completed the race!</span>;
+            return (
+              <div className="completed">
+                <span>You have completed the race!</span>
+                <button
+                  onClick={() => dispatch({ type: RESET_GAME })}
+                >
+                  Try again?
+                </button>
+              </div>
+            );
           case Phases.typing:
             return <TypingInterface textData={textData} phase={phase} />;
           default:

@@ -14,7 +14,7 @@ export function handleMsg(msg: string, ws: WebSocket) {
       case RequestTypes.typing_text:
         ws.send(
           JSON.stringify(
-            { type: RequestTypes.typing_text, payload: TypingText.tutorial },
+            { type: RequestTypes.typing_text, payload: TypingText.john_wick },
           ),
         );
         break;

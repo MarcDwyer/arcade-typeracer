@@ -1,12 +1,27 @@
 import { RouteModes } from "./enums";
 
 export type Character = {
-  completed: boolean;
   char: string;
+  completed: boolean;
+  lastChar: boolean;
 };
 
 export function transformChar(txt: string): Character[] {
-  return txt.split("").map((s) => ({ char: s, completed: false }));
+  const result: Character[] = [];
+
+  for (let x = 0; x < txt.length; x++) {
+    const char = {
+      char: txt[x],
+      completed: false,
+      lastChar: false,
+    };
+    const next = txt[x + 1];
+    if (!next || next === " ") {
+      char.lastChar = true;
+    }
+    result.push(char);
+  }
+  return result;
 }
 
 export function wordsCalc(txt: string) {
