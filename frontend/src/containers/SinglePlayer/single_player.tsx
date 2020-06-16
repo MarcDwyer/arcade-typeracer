@@ -9,6 +9,7 @@ import { setTimer } from "../../actions/game_actions";
 import { RESET_GAME } from "../../reducers/game_reducer";
 
 import { StandardBtn } from "../../styled-components/buttons";
+import { CompletedMsg } from "../../styled-components/game_styles";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function SinglePlayer() {
           case Phases.loaded:
             return (
               <StandardBtn
-                colorType="standard"
+                colorType="default"
                 onClick={() => {
                   dispatch(setTimer(8, Phases.countdown));
                 }}
@@ -37,12 +38,12 @@ export default function SinglePlayer() {
             return <span>Get Ready!</span>;
           case Phases.complete:
             return (
-              <div className="completed">
+              <CompletedMsg>
                 <span>You have completed the race!</span>
-                <button onClick={() => dispatch({ type: RESET_GAME })}>
-                  Try again?
-                </button>
-              </div>
+                <StandardBtn onClick={() => dispatch({ type: RESET_GAME })}>
+                  Another?
+                </StandardBtn>
+              </CompletedMsg>
             );
           case Phases.typing:
             return <TypingInterface textData={textData} phase={phase} />;

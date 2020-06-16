@@ -1,0 +1,13 @@
+.mode-display {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.shared-data {
+  display: flex;
+  flex-direction: column;
+
+  * {
+    margin-bottom: 2.5px;
+  }
+}

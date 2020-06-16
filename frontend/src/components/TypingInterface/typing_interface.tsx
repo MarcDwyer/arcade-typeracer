@@ -6,6 +6,10 @@ import { handleTyping } from "../../actions/game_actions";
 import { TextData } from "../../reducers/reducer_types";
 import { PhaseTypes } from "../../reducers/reducer_types";
 
+import { TypeRacingDiv } from "../../styled-components/game_styles";
+
+import { MyInput } from "../../styled-components/inputs";
+
 import "./typing_interface.scss";
 import { Phases } from "../../enums";
 
@@ -16,26 +20,27 @@ type Props = {
 
 function TypingInterface(props: Props) {
   const dispatch = useDispatch();
-  const { text, wordCount, value, error } = props.textData;
+  const { text, value, error } = props.textData;
   return (
     <div className="typing-interface">
       {text && (
-        <div className="typering">
-          <span>{wordCount}</span>
-          {error && <span>{error}</span>}
-          <div className="text-data">
-            {text && text.map((char, index) => {
-              return (
-                <IndividualChar key={index} char={char} />
-              );
-            })}
-          </div>
-          <input
-            disabled={props.phase === Phases.complete}
-            value={value}
-            onChange={(e) => dispatch(handleTyping(e.target.value))}
-          />
-        </div>
+        <>
+          <TypeRacingDiv>
+            {error && <span style={{ color: "red" }}>{error}</span>}
+            <div className="text-data">
+              {text && text.map((char, index) => {
+                return (
+                  <IndividualChar key={index} char={char} />
+                );
+              })}
+            </div>
+            <MyInput
+              disabled={props.phase === Phases.complete}
+              value={value}
+              onChange={(e) => dispatch(handleTyping(e.target.value))}
+            />
+          </TypeRacingDiv>
+        </>
       )}
     </div>
   );

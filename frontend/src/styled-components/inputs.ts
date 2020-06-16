@@ -1,13 +1,11 @@
 import styled from "styled-components";
-
-enum InputColors {
-  standard = "#676A76",
-}
+import { Theme } from "../themes/theme_colors.";
 
 export const MyInput = styled.input`
-    padding: 15px 15px;
+    padding: 10px 10px;
+    border-radius: 5px;
     color: #eee;
-    background-color: ${InputColors.standard};
+    background-color: ${Theme.shadeColor};
     outline: none;
     border: none;
 `;

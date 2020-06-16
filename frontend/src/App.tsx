@@ -18,7 +18,12 @@ function App() {
     dispatch(setWs(ws));
   }, []);
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{
+        backgroundColor: Theme.bgColor,
+      }}
+    >
       <div className="inner-div" style={{ backgroundColor: Theme.shadeColor }}>
         <Router>
           <Switch>

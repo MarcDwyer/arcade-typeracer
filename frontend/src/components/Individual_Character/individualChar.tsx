@@ -6,7 +6,9 @@ type Props = {
   char: Character;
 };
 function handleStyles(char: Character) {
-  let styles = {};
+  let styles: any = {
+    fontSize: "14px",
+  };
   if (char.completed) {
     styles = {
       ...styles,

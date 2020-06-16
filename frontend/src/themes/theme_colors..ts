@@ -1,5 +1,8 @@
-export enum Theme {
-  bgColor = "#2e3141",
-  shadeColor = "#424554",
-  colorSuccess = "#66B266",
-}
+export const Theme = {
+  bgColor: "#191919",
+  shadeColor: "#2F2F2F",
+  colorSuccess: "#66B266",
+  arcade_green: "#00CD00",
+};
+
+// green #00CD00
