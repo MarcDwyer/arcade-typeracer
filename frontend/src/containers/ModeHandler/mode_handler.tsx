@@ -14,9 +14,7 @@ import { finalizeTyping, setTimer } from "../../actions/game_actions";
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [phase, timer, ws, wpm] = useSelector((
-    store: ReduxStore.State,
-  ) => [
+  const [phase, timer, ws, wpm] = useSelector((store: ReduxStore.State) => [
     store.gameData.status.phase,
     store.gameData.timer,
     store.socket,
@@ -44,11 +42,11 @@ function ModeHandler() {
 
   const isWpm = typeof wpm === "number";
 
+  console.log(phase);
+
   return (
     <div className="mode-handler">
-      {timer.countdown && (
-        <span>{timer.countdown}</span>
-      )}
+      {timer.countdown && <span>{timer.countdown}</span>}
       {isWpm && <span>{wpm} wpm</span>}
       {(() => {
         switch (mode) {

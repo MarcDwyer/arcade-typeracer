@@ -8,6 +8,8 @@ import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { setTimer } from "../../actions/game_actions";
 import { RESET_GAME } from "../../reducers/game_reducer";
 
+import { StandardBtn } from "../../styled-components/buttons";
+
 export default function SinglePlayer() {
   const dispatch = useDispatch();
   const [phase, textData] = useSelector((store: ReduxStore.State) => [
@@ -20,13 +22,14 @@ export default function SinglePlayer() {
         switch (phase) {
           case Phases.loaded:
             return (
-              <button
+              <StandardBtn
+                colorType="standard"
                 onClick={() => {
                   dispatch(setTimer(8, Phases.countdown));
                 }}
               >
                 Start
-              </button>
+              </StandardBtn>
             );
           case Phases.waiting:
             return <span>Fetching typing data...</span>;
@@ -36,9 +39,7 @@ export default function SinglePlayer() {
             return (
               <div className="completed">
                 <span>You have completed the race!</span>
-                <button
-                  onClick={() => dispatch({ type: RESET_GAME })}
-                >
+                <button onClick={() => dispatch({ type: RESET_GAME })}>
                   Try again?
                 </button>
               </div>
