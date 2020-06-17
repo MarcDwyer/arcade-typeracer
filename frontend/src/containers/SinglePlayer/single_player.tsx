@@ -8,7 +8,7 @@ import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { setTimer } from "../../actions/game_actions";
 import { RESET_GAME } from "../../reducers/game_reducer";
 
-import { StandardBtn } from "../../styled-components/buttons";
+import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
 
 export default function SinglePlayer() {
@@ -40,9 +40,9 @@ export default function SinglePlayer() {
             return (
               <CompletedMsg>
                 <span>You have completed the race!</span>
-                <StandardBtn onClick={() => dispatch({ type: RESET_GAME })}>
-                  Another?
-                </StandardBtn>
+                <TryAgain onClick={() => dispatch({ type: RESET_GAME })}>
+                  Try Again?
+                </TryAgain>
               </CompletedMsg>
             );
           case Phases.typing:

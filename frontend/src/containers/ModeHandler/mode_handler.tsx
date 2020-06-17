@@ -7,7 +7,11 @@ import { RouteModes, Phases, PayloadTypes } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
-import { finalizeTyping, setTimer } from "../../actions/game_actions";
+import {
+  finalizeTyping,
+  setTimer,
+  skipTimer,
+} from "../../actions/game_actions";
 
 import "./mode_handler.scss";
 
@@ -26,6 +30,13 @@ function ModeHandler() {
     store.gameData.textData,
   ]);
   const { wpm, wordCount } = textData;
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.keyCode === 72) {
+        dispatch(skipTimer());
+      }
+    });
+  }, []);
   useEffect(() => {
     switch (phase) {
       case Phases.waiting:

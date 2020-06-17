@@ -107,3 +107,10 @@ export function setTimer(duration: number, phase: PhaseTypes) {
     });
   };
 }
+
+export function skipTimer() {
+  return {
+    type: UPDATE_COUNTDOWN,
+    payload: 3,
+  };
+}
