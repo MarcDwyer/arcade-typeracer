@@ -5,6 +5,8 @@ import { SET_TYPING } from "../reducers/game_reducer";
 import { WsPayload } from "./action_types";
 import { transformChar } from "../util";
 
+import io from "socket.io-client";
+
 function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
     try {
@@ -20,11 +22,17 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
     }
   });
 }
-export function setWs(ws: WebSocket) {
+export function setWs(url?: string) {
+  const aUrl = url || `ws://localhost:1337/ws/`;
   return (dispatch: Dispatch) => {
+    const ws = new WebSocket(aUrl);
+
     ws.onopen = () => {
-      handleEvents(ws, dispatch);
-      dispatch({ type: SET_WEBSOCKET, payload: ws });
+      console.log("ws opened");
+      dispatch({
+        type: SET_WEBSOCKET,
+        payload: ws,
+      });
     };
     ws.onerror = (er) => console.log("Error connecting WS " + er);
   };

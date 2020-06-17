@@ -7,6 +7,7 @@ const BtnColors = {
   default: Theme.bgColor,
   success: "#87B05E",
 };
+
 type BtnColorKeys = keyof typeof BtnColors;
 
 interface PModelLink {

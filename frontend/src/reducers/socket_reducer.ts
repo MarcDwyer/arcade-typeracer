@@ -6,7 +6,7 @@ export const SET_WEBSOCKET = Symbol();
 
 export default function SocketReducer(
   state: WebSocketState = null,
-  { type, payload }: Action,
+  { type, payload }: Action
 ) {
   switch (type) {
     case SET_WEBSOCKET:

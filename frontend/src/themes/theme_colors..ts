@@ -4,5 +4,3 @@ export const Theme = {
   colorSuccess: "#66B266",
   arcade_green: "#00CD00",
 };
-
-// green #00CD00

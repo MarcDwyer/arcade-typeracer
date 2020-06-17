@@ -14,9 +14,9 @@ import "./App.scss";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const ws = new WebSocket(`ws://${document.location.hostname}:1337`);
-    dispatch(setWs(ws));
+    dispatch(setWs());
   }, []);
+
   return (
     <div
       className="App"
