@@ -14,9 +14,12 @@ import "./mode_handler.scss";
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [phase, timer, ws, textData] = useSelector((
-    store: ReduxStore.State,
-  ) => [
+  const [
+    phase,
+    timer,
+    ws,
+    textData,
+  ] = useSelector((store: ReduxStore.State) => [
     store.gameData.status.phase,
     store.gameData.timer,
     store.socket,
@@ -32,10 +35,10 @@ function ModeHandler() {
     }
   }, [phase, ws]);
   useEffect(() => {
-    if (phase === Phases.typing && !timer.countdown) {
-      dispatch(setTimer(12, Phases.typing));
+    if (textData.duration && phase === Phases.typing && !timer.countdown) {
+      dispatch(setTimer(textData.duration, Phases.typing));
     }
-  }, [timer, phase]);
+  }, [timer, phase, textData.duration]);
   useEffect(() => {
     if (phase === Phases.complete && !wpm) {
       dispatch(finalizeTyping());
@@ -43,9 +46,6 @@ function ModeHandler() {
   }, [phase, wpm]);
 
   const isWpm = typeof wpm === "number";
-
-  console.log(wordCount);
-
   return (
     <div className="mode-handler">
       <div className="shared-data">

@@ -5,16 +5,22 @@ import { SET_TYPING } from "../reducers/game_reducer";
 import { WsPayload } from "./action_types";
 import { transformChar } from "../util";
 
-import io from "socket.io-client";
-
 function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
     try {
       const data: WsPayload = JSON.parse(msg.data);
+      const { text, time } = data.payload;
+      console.log(data);
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {
         case PayloadTypes.typing_text:
-          dispatch({ type: SET_TYPING, payload: transformChar(data.payload) });
+          dispatch({
+            type: SET_TYPING,
+            payload: {
+              text: transformChar(text),
+              duration: time || 120,
+            },
+          });
           break;
       }
     } catch (e) {
@@ -29,6 +35,7 @@ export function setWs(url?: string) {
 
     ws.onopen = () => {
       console.log("ws opened");
+      handleEvents(ws, dispatch);
       dispatch({
         type: SET_WEBSOCKET,
         payload: ws,

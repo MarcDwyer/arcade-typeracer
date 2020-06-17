@@ -7,5 +7,9 @@ export type GetState = () => ReduxStore.State;
 
 export type WsPayload = {
   type: string;
-  payload: any;
+  payload: {
+    name: string;
+    text: string;
+    time: number;
+  };
 };

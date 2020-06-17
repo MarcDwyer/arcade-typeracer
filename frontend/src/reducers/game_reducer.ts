@@ -8,22 +8,23 @@ export type GameData = {
   status: StatusState;
 };
 
-const timer = {
+const timer: Countdown = {
   duration: 0,
   countdown: null,
   interval: null,
 };
-const status = {
+const status: StatusState = {
   mode: null,
   phase: Phases.waiting,
 };
-const textData = {
+const textData: TextData = {
   text: null,
   wordCount: 0,
   error: null,
   currIndex: 0,
   value: "",
   wpm: null,
+  duration: null,
 };
 const initState: GameData = {
   textData,
@@ -41,10 +42,7 @@ export const INC_INDEX = Symbol(),
   UPDATE_COUNTDOWN = Symbol(),
   RESET_GAME = Symbol();
 
-function GameReducer(
-  state: GameData = initState,
-  { type, payload }: Action,
-) {
+function GameReducer(state: GameData = initState, { type, payload }: Action) {
   switch (type) {
     case INC_INDEX:
       return { ...state, textData: { ...state.textData, ...payload } };
@@ -54,7 +52,12 @@ function GameReducer(
       return {
         ...state,
         status: { ...state.status, phase: Phases.loaded },
-        textData: { ...state.textData, wordCount: 0, text: payload },
+        textData: {
+          ...state.textData,
+          wordCount: 0,
+          text: payload.text,
+          duration: payload.duration,
+        },
       };
     case UPDATE_COUNTDOWN:
       return { ...state, timer: { ...state.timer, countdown: payload } };

@@ -1,1 +1,2 @@
-☐ Create function that calculates wpm, has to be interchangeable between actions
+✔ Create function that calculates wpm, has to be interchangeable between actions @done(20-06-17 01:05)
+☐ Duration of typing should be set by server and depends on the length of the text needed to be typed

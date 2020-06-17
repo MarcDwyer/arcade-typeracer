@@ -14,6 +14,7 @@ export type TextData = {
   currIndex: number;
   value: string;
   wpm: number | null;
+  duration: number | null;
 };
 
 type KeysOfPhases = keyof typeof Phases;
