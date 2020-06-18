@@ -30,7 +30,7 @@ function ModeHandler() {
     store.socket,
     store.gameData.textData,
   ]);
-  const { wpm, wordCount } = textData;
+  const { wpm } = textData;
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
       if (e.keyCode === 57) {
@@ -63,9 +63,6 @@ function ModeHandler() {
       <div className="shared-data">
         {timer.countdown && <span>{timer.countdown} seconds</span>}
         {isWpm && <span style={{ color: Theme.arcade_green }}>{wpm} wpm</span>}
-        {phase === Phases.complete && wordCount !== 0 && (
-          <span>{wordCount} words typed</span>
-        )}
       </div>
       <div className="mode-display">
         {(() => {
