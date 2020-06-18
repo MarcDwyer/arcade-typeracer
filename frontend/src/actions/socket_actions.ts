@@ -28,8 +28,11 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
     }
   });
 }
-export function setWs(url?: string) {
-  const aUrl = url || `ws://localhost:1337/ws/`;
+export function setWs(isDev: boolean) {
+  const aUrl = isDev
+    ? `ws://localhost:1337/ws/`
+    : `wss://${document.location.hostname}/ws/`;
+  console.log(aUrl);
   return (dispatch: Dispatch) => {
     const ws = new WebSocket(aUrl);
 

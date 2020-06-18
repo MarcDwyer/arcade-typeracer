@@ -59,7 +59,13 @@ function ModeHandler() {
 
   const isWpm = typeof wpm === "number";
   return (
-    <div className="mode-handler">
+    <div
+      className="mode-handler"
+      style={{
+        backgroundColor:
+          phase === Phases.typing ? Theme.shadeColor : "transparent",
+      }}
+    >
       <div className="shared-data">
         {timer.countdown && <span>{timer.countdown} seconds</span>}
         {isWpm && <span style={{ color: Theme.arcade_green }}>{wpm} wpm</span>}

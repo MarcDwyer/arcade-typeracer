@@ -14,7 +14,8 @@ import "./App.scss";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setWs());
+    const isDev = process.env.NODE_ENV === "development";
+    dispatch(setWs(isDev));
   }, []);
 
   return (
@@ -24,14 +25,12 @@ function App() {
         backgroundColor: Theme.bgColor,
       }}
     >
-      <div className="inner-div" style={{ backgroundColor: Theme.shadeColor }}>
-        <Router>
-          <Switch>
-            <Route component={ModeHandler} path="/:mode" />
-            <Route component={Homepage} path={"/"} />
-          </Switch>
-        </Router>
-      </div>
+      <Router>
+        <Switch>
+          <Route component={ModeHandler} path="/:mode" />
+          <Route component={Homepage} path={"/"} />
+        </Switch>
+      </Router>
     </div>
   );
 }
