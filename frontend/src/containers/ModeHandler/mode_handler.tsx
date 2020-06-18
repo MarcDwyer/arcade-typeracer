@@ -14,6 +14,7 @@ import {
 } from "../../actions/game_actions";
 
 import "./mode_handler.scss";
+import { Theme } from "../../themes/theme_colors.";
 
 function ModeHandler() {
   const { mode } = useParams();
@@ -32,7 +33,7 @@ function ModeHandler() {
   const { wpm, wordCount } = textData;
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
-      if (e.keyCode === 72) {
+      if (e.keyCode === 57) {
         dispatch(skipTimer());
       }
     });
@@ -61,8 +62,10 @@ function ModeHandler() {
     <div className="mode-handler">
       <div className="shared-data">
         {timer.countdown && <span>{timer.countdown} seconds</span>}
-        {wordCount !== 0 && <span>{wordCount} words typed</span>}
-        {isWpm && <span>{wpm} wpm</span>}
+        {isWpm && <span style={{ color: Theme.arcade_green }}>{wpm} wpm</span>}
+        {phase === Phases.complete && wordCount !== 0 && (
+          <span>{wordCount} words typed</span>
+        )}
       </div>
       <div className="mode-display">
         {(() => {

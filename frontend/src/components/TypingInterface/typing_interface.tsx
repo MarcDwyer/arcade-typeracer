@@ -27,7 +27,6 @@ function TypingInterface(props: Props) {
       inputRef.current.focus();
     }
   }, []);
-
   return (
     <div className="typing-interface">
       {text && (

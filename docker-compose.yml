@@ -1,0 +1,8 @@
+version: "3"
+services:
+  backend:
+    build: backend
+    ports:
+      - "1867:1867"
+    container_name: typer_backend
+    restart: always

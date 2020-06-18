@@ -29,7 +29,7 @@ export default function SinglePlayer() {
                   dispatch(setTimer(8, Phases.countdown));
                 }}
               >
-                Start
+                Ready?
               </StandardBtn>
             );
           case Phases.waiting:
