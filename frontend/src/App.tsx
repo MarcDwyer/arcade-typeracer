@@ -25,12 +25,14 @@ function App() {
         backgroundColor: Theme.bgColor,
       }}
     >
-      <Router>
-        <Switch>
-          <Route component={ModeHandler} path="/:mode" />
-          <Route component={Homepage} path={"/"} />
-        </Switch>
-      </Router>
+      <div className="inner-div">
+        <Router>
+          <Switch>
+            <Route component={ModeHandler} path="/:mode" />
+            <Route component={Homepage} path={"/"} />
+          </Switch>
+        </Router>
+      </div>
     </div>
   );
 }
