@@ -17,6 +17,7 @@ export default function SinglePlayer() {
     store.gameData.status.phase,
     store.gameData.textData,
   ]);
+  // console.log(textData.wordCount);
   return (
     <div className="single-player">
       {(() => {

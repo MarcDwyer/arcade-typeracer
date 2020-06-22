@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import ModeHandler from "./containers/ModeHandler/mode_handler";
 import Homepage from "./containers/Homepage/home";
+import ErrorModal from "./containers/Error_Modal/error_modal";
 
 import { Theme } from "./themes/theme_colors.";
 import { useDispatch } from "react-redux";
@@ -26,6 +27,7 @@ function App() {
       }}
     >
       <div className="inner-div">
+        <ErrorModal />
         <Router>
           <Switch>
             <Route component={ModeHandler} path="/:mode" />

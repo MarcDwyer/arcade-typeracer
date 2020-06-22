@@ -3,7 +3,6 @@ import { RouteModes } from "./enums";
 export type Character = {
   char: string;
   completed: boolean;
-  lastChar: boolean;
 };
 
 export function transformChar(txt: string): Character[] {
@@ -13,12 +12,7 @@ export function transformChar(txt: string): Character[] {
     const char = {
       char: txt[x],
       completed: false,
-      lastChar: false,
     };
-    const next = txt[x + 1];
-    if (!next || next === " ") {
-      char.lastChar = true;
-    }
     result.push(char);
   }
   return result;
@@ -60,7 +54,7 @@ export const getTime = (futureTime: number): TimeResults | null => {
 };
 
 /**
- * 
+ *
  * @param route Is the params given to ModeHandler
  * @returns a boolean that returns true if route is valid
  */

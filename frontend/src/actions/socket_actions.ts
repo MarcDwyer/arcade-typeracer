@@ -4,6 +4,7 @@ import { PayloadTypes } from "../enums";
 import { SET_TYPING } from "../reducers/game_reducer";
 import { WsPayload } from "./action_types";
 import { transformChar } from "../util";
+import { SET_APP_ERROR } from "../reducers/error_reducer";
 
 function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
@@ -30,9 +31,8 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
 }
 export function setWs(isDev: boolean) {
   const aUrl = isDev
-    ? `ws://localhost:1337/ws/`
+    ? `ws://localhost:1867/ws/`
     : `wss://${document.location.hostname}/ws/`;
-  console.log(aUrl);
   return (dispatch: Dispatch) => {
     const ws = new WebSocket(aUrl);
 
@@ -44,6 +44,7 @@ export function setWs(isDev: boolean) {
         payload: ws,
       });
     };
-    ws.onerror = (er) => console.log("Error connecting WS " + er);
+    ws.onerror = () =>
+      dispatch({ type: SET_APP_ERROR, payload: "Error connecting to server" });
   };
 }

@@ -14,26 +14,30 @@ import { GetState } from "./action_types";
 import { Phases } from "../enums";
 
 export function handleTyping(char: string) {
-  char = char[char.length - 1];
   return (dispatch: Dispatch, getState: GetState) => {
     const { textData } = getState().gameData;
-    const { text, currIndex, wordCount, value } = textData;
+    const { text, currIndex, value } = textData;
+
+    const currChar = char[char.length - 1];
     if (!text) return;
     const curr = text[currIndex];
-    if (char !== curr.char) {
+    if (currChar !== curr.char) {
       dispatch({ type: SET_ERROR, payload: "Incorrect character" });
       return;
     }
     text[currIndex].completed = true;
-    const newValue = char === " " ? char : value + char;
     const completed = text.length - 1 === currIndex;
+    const newIndex = completed ? currIndex : currIndex + 1;
+
+    const newValue = currChar === " " ? "" : value + currChar;
+    const newWordCount = Math.floor((newIndex + 1) / 5);
 
     dispatch({
       type: INC_INDEX,
       payload: {
         error: false,
-        currIndex: completed ? currIndex : currIndex + 1,
-        wordCount: curr.lastChar ? wordCount + 1 : wordCount,
+        currIndex: newIndex,
+        wordCount: newWordCount,
         value: newValue,
       },
     });
@@ -55,7 +59,6 @@ export function finalizeTyping() {
     const { timer, textData } = getState().gameData;
     const { countdown, duration } = timer;
     console.log("finalizing...");
-    console.log(timer);
     const wpm = () => {
       if (!countdown || !textData.wordCount) return 0;
       const timeTook = duration - countdown;
