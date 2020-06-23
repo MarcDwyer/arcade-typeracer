@@ -18,12 +18,13 @@ export const useWpm = (
     if (!countdown || phase !== Phases.typing) {
       return;
     }
-    const diff = duration - countdown;
+    const diff = (duration - countdown) / 60;
+    console.log(diff);
     if (!diff) {
       setWpm(0);
       return;
     }
-    const result = roundTenth((wordCount / diff) * 100);
+    const result = roundTenth(wordCount / diff);
     setWpm(result);
   }, [wordCount, countdown, phase]);
   return wpm;
