@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
-import { Phases } from "../../enums";
+import { Phases, PayloadTypes } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { setTimer } from "../../actions/game_actions";
@@ -13,11 +13,20 @@ import { CompletedMsg } from "../../styled-components/game_styles";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
-  const [phase, textData] = useSelector((store: ReduxStore.State) => [
+  const [phase, textData, ws] = useSelector((store: ReduxStore.State) => [
     store.gameData.status.phase,
     store.gameData.textData,
+    store.socket,
   ]);
-  // console.log(textData.wordCount);
+  useEffect(() => {
+    switch (phase) {
+      case Phases.waiting:
+        if (ws) {
+          ws.send(JSON.stringify({ type: PayloadTypes.typing_text }));
+        }
+    }
+  }, [phase, ws]);
+
   return (
     <div className="single-player">
       {(() => {

@@ -2,7 +2,6 @@ import { Dispatch } from "redux";
 import {
   INC_INDEX,
   SET_ERROR,
-  FINALIZE_TYPING,
   SET_COUNTDOWN,
   UPDATE_COUNTDOWN,
   CLEAR_COUNTDOWN,
@@ -47,27 +46,6 @@ export function handleTyping(char: string) {
         payload: Phases.complete,
       });
     }
-  };
-}
-
-const round = (num: number, places: number = 2) => {
-  const multi = Math.pow(10, places);
-  return Math.round(num * multi) / multi;
-};
-export function finalizeTyping() {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const { timer, textData } = getState().gameData;
-    const { countdown, duration } = timer;
-    console.log("finalizing...");
-    const wpm = () => {
-      if (!countdown || !textData.wordCount) return 0;
-      const timeTook = duration - countdown;
-      return (textData.wordCount / timeTook) * 100;
-    };
-    dispatch({
-      type: FINALIZE_TYPING,
-      payload: round(wpm()),
-    });
   };
 }
 

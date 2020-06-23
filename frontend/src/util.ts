@@ -69,3 +69,8 @@ export function validRouteMode(route: string): boolean {
   }
   return isValid;
 }
+
+export const roundTenth = (num: number, places: number = 2) => {
+  const multi = Math.pow(10, places);
+  return Math.round(num * multi) / multi;
+};

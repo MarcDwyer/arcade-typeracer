@@ -3,34 +3,25 @@ import { useParams } from "react-router";
 
 import SinglePlayer from "../SinglePlayer/single_player";
 
-import { RouteModes, Phases, PayloadTypes } from "../../enums";
+import { RouteModes, Phases } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
-import {
-  finalizeTyping,
-  setTimer,
-  skipTimer,
-} from "../../actions/game_actions";
+import { setTimer, skipTimer } from "../../actions/game_actions";
 
 import "./mode_handler.scss";
 import { Theme } from "../../themes/theme_colors.";
+import { useWpm } from "../../hooks";
+import { FINALIZE_TYPING } from "../../reducers/game_reducer";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
-  const [
-    phase,
-    timer,
-    ws,
-    textData,
-  ] = useSelector((store: ReduxStore.State) => [
+  const [phase, timer, textData] = useSelector((store: ReduxStore.State) => [
     store.gameData.status.phase,
     store.gameData.timer,
-    store.socket,
     store.gameData.textData,
   ]);
-  const { wpm } = textData;
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
       if (e.keyCode === 57) {
@@ -38,26 +29,24 @@ function ModeHandler() {
       }
     });
   }, []);
-  useEffect(() => {
-    switch (phase) {
-      case Phases.waiting:
-        if (ws) {
-          ws.send(JSON.stringify({ type: PayloadTypes.typing_text }));
-        }
-    }
-  }, [phase, ws]);
+  const wpm = useWpm(textData.wordCount, phase, timer);
+  console.log(wpm);
   useEffect(() => {
     if (textData.duration && phase === Phases.typing && !timer.countdown) {
       dispatch(setTimer(textData.duration, Phases.typing));
     }
   }, [timer, phase, textData.duration]);
-  useEffect(() => {
-    if (phase === Phases.complete && !wpm) {
-      dispatch(finalizeTyping());
-    }
-  }, [phase, wpm]);
 
-  const isWpm = typeof wpm === "number";
+  useEffect(() => {
+    if (phase === Phases.complete) {
+      console.log("finalizing...");
+      dispatch({
+        type: FINALIZE_TYPING,
+        payload: wpm,
+      });
+    }
+  }, [phase]);
+
   return (
     <div
       className="mode-handler"
@@ -68,7 +57,7 @@ function ModeHandler() {
     >
       <div className="shared-data">
         {timer.countdown && <span>{timer.countdown} seconds</span>}
-        {isWpm && <span style={{ color: Theme.arcade_green }}>{wpm} wpm</span>}
+        {typeof wpm === "number" && <span>{wpm} wpm</span>}
       </div>
       <div className="mode-display">
         {(() => {

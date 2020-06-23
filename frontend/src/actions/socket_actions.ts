@@ -11,7 +11,6 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
     try {
       const data: WsPayload = JSON.parse(msg.data);
       const { text, time } = data.payload;
-      console.log(data);
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {
         case PayloadTypes.typing_text:
