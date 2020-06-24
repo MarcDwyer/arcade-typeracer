@@ -1,5 +1,6 @@
 export enum PayloadTypes {
-    single_typing_text = "singletypingtext" 
+    singleTypingText = "singletypingtext",
+    joinRoom = "joinroom"
 }
 
 export enum SingleTypes {

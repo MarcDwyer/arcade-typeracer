@@ -10,11 +10,12 @@ export default async function WsHandler(ws: WebSocket, msg: string) {
     const data: Data = JSON.parse(msg)
 
     switch(data.type) {
-        case PayloadTypes.single_typing_text:
+        case PayloadTypes.singleTypingText:
             const randomTxt = textData[Math.floor(Math.random() * textData.length)]
-            console.log(randomTxt)
-           await ws.send(JSON.stringify({type: PayloadTypes.single_typing_text, payload: randomTxt}))
+           await ws.send(JSON.stringify({type: PayloadTypes.singleTypingText, payload: randomTxt}))
            break;
+        case PayloadTypes.joinRoom:
+            
         default:
             console.log("No case found for " + data.type)
         }
