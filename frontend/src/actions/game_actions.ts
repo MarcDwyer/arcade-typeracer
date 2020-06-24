@@ -17,10 +17,9 @@ export function handleTyping(char: string) {
     const { textData } = getState().gameData;
     const { text, currIndex, value } = textData;
 
-    const currChar = char[char.length - 1];
     if (!text) return;
     const curr = text[currIndex];
-    if (currChar !== curr.char) {
+    if (char !== curr.char) {
       dispatch({ type: SET_ERROR, payload: "Incorrect character" });
       return;
     }
@@ -28,7 +27,7 @@ export function handleTyping(char: string) {
     const completed = text.length - 1 === currIndex;
     const newIndex = completed ? currIndex : currIndex + 1;
 
-    const newValue = currChar === " " ? "" : value + currChar;
+    const newValue = char === " " ? "" : value + char;
     const newWordCount = Math.floor((newIndex + 1) / 5);
 
     dispatch({

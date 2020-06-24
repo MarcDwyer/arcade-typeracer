@@ -10,6 +10,7 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
     try {
       const data: WsPayload = JSON.parse(msg.data);
+      console.log(data)
       const { text, time } = data.payload;
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {

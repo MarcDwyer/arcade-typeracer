@@ -1,0 +1,12 @@
+Need a piece of state for the room data. Only thing I need is name of user and current wpm.
+
+Rooms
+RoomKey: {
+    text: what the room is typing,
+    users: Users
+}
+
+Users
+UserKey: {
+    wpm
+}

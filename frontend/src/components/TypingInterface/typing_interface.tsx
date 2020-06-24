@@ -44,7 +44,11 @@ function TypingInterface(props: Props) {
               //@ts-ignore
               ref={inputRef}
               value={value}
-              onChange={(e) => dispatch(handleTyping(e.target.value))}
+              onChange={(e) => {
+                let char = e.target.value;
+                char = char[char.length - 1];
+                dispatch(handleTyping(char))
+              }}
             />
           </TypeRacingDiv>
         </>
