@@ -14,7 +14,7 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
       const { text, time } = data.payload;
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {
-        case PayloadTypes.typing_text:
+        case PayloadTypes.single_typing_text:
           dispatch({
             type: SET_TYPING,
             payload: {

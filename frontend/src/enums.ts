@@ -12,5 +12,5 @@ export enum Phases {
 }
 
 export enum PayloadTypes {
-  typing_text = "typingtext",
+  single_typing_text = "singletypingtext",
 }

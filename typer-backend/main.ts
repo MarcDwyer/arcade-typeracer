@@ -9,11 +9,10 @@ import {
 import HandleWs from "./ws_handler.ts"
 
 async function handleWs(sock: WebSocket) {
-  console.log("socket connected!");
   try {
     for await (const ev of sock) {
       if (typeof ev === "string") {
-        HandleWs(sock, ev)
+        await HandleWs(sock, ev)
       } else if (ev instanceof Uint8Array) {
         // binary message
         console.log("ws:Binary", ev);
@@ -29,7 +28,6 @@ async function handleWs(sock: WebSocket) {
     }
   } catch (err) {
     console.error(`failed to receive frame: ${err}`);
-
     if (!sock.isClosed) {
       await sock.close(1000).catch(console.error);
     }

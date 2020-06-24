@@ -22,7 +22,7 @@ export default function SinglePlayer() {
     switch (phase) {
       case Phases.waiting:
         if (ws) {
-          ws.send(JSON.stringify({ type: PayloadTypes.typing_text }));
+          ws.send(JSON.stringify({ type: PayloadTypes.single_typing_text }));
         }
     }
   }, [phase, ws]);
