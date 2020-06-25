@@ -1,11 +1,11 @@
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
-
+import Player from "./player.ts";
 // Why am i not using maps
 class Rooms {
   public rooms: Map<string, Room> = new Map();
   private lastRoom: Room | undefined;
 
-  joinRoom(user: string) {
+  joinRoom(user: string): Player {
     if (
       !this.lastRoom ||
       //@ts-ignore
@@ -13,7 +13,7 @@ class Rooms {
     ) {
       this.lastRoom = this.createRoom();
     }
-    const playerData = this.lastRoom.addPlayer(user, this.lastRoom.roomId);
+    const playerData = this.lastRoom.addPlayer(user);
     return playerData;
   }
   private createRoom(): Room {
@@ -25,17 +25,6 @@ class Rooms {
     return newRoom;
   }
 }
-/**
- * @paramType progress is how much of the text has been typed by the user
- * @paramType wpm - words per minute
- */
-type Player = {
-  user: string;
-  wpm: number;
-  progress: number;
-  userKey: number;
-  roomKey: string;
-};
 
 class Room {
   private playerCount: number = 0;
@@ -43,21 +32,13 @@ class Room {
   public players: Map<number, Player> = new Map();
   constructor(public roomId: string) {}
 
-  addPlayer(user: string, roomKey: string): Player {
-    ++this.playerCount;
-    if (this.playerCount >= 8) {
+  addPlayer(user: string): Player {
+    let count = ++this.playerCount;
+    if (count >= 8) {
       this.filled = true;
     }
-    const newPlayer: Player = {
-      user,
-      roomKey,
-      wpm: 0,
-      progress: 0,
-      userKey: this.playerCount,
-    };
-    const player = this.players
-      .set(this.playerCount, newPlayer)
-      .get(this.playerCount);
+    const newPlayer = new Player(user, count, this.roomId);
+    const player = this.players.set(count, newPlayer).get(count);
     //@ts-ignore
     return player;
   }

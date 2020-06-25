@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 
 import IndividualChar from "../Individual_Character/individualChar";
 import { useDispatch } from "react-redux";
-import { handleTyping } from "../../actions/game_actions";
-import { TextData } from "../../reducers/reducer_types";
-import { PhaseTypes } from "../../reducers/reducer_types";
+import { handleTyping } from "../../actions/typing_actions";
+import { TextData } from "../../reducers/text_reducer";
+import { PhaseTypes } from "../../reducers/status_reducer";
 
 import { TypeRacingDiv } from "../../styled-components/game_styles";
 
@@ -47,7 +47,7 @@ function TypingInterface(props: Props) {
               onChange={(e) => {
                 let char = e.target.value;
                 char = char[char.length - 1];
-                dispatch(handleTyping(char))
+                dispatch(handleTyping(char));
               }}
             />
           </TypeRacingDiv>

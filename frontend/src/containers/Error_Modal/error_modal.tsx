@@ -8,7 +8,6 @@ import "./error_modal.scss";
 
 function ErrorModal() {
   const error = useSelector((store: ReduxStore.State) => store.error);
-  console.log(error);
   const errorDiv = useSpring({
     from: {
       transform: "translateX(+100%)",

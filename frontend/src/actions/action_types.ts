@@ -1,7 +1,7 @@
 import { ReduxStore } from "../reducers/main";
 
 /**
- * Use this for second parameter for thunk
+ * GetState is the second paramter for redux-thunk
  */
 export type GetState = () => ReduxStore.State;
 

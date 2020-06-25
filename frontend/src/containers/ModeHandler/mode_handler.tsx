@@ -7,33 +7,30 @@ import { RouteModes, Phases } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
-import { setTimer, skipTimer } from "../../actions/game_actions";
+import { setTimer } from "../../actions/timer_actions";
 
 import "./mode_handler.scss";
 import { Theme } from "../../themes/theme_colors.";
-import { useWpm } from "../../hooks";
-import { FINALIZE_TYPING } from "../../reducers/game_reducer";
+import { FINALIZE_TYPING } from "../../reducers/text_reducer";
+import { CHANGE_PHASE } from "../../reducers/status_reducer";
 
 function ModeHandler() {
   const { mode } = useParams();
   const dispatch = useDispatch();
   const [phase, timer, textData] = useSelector((store: ReduxStore.State) => [
-    store.gameData.status.phase,
-    store.gameData.timer,
-    store.gameData.textData,
+    store.status.phase,
+    store.timer,
+    store.textData,
   ]);
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if (e.keyCode === 57) {
-        dispatch(skipTimer());
-      }
-    });
-  }, []);
-  const wpm = useWpm(textData.wordCount, phase, timer);
-  console.log(wpm);
+
   useEffect(() => {
     if (textData.duration && phase === Phases.typing && !timer.countdown) {
-      dispatch(setTimer(textData.duration, Phases.typing));
+      dispatch(
+        setTimer(
+          textData.duration,
+          Phases.complete,
+        ),
+      );
     }
   }, [timer, phase, textData.duration]);
 
@@ -42,7 +39,7 @@ function ModeHandler() {
       console.log("finalizing...");
       dispatch({
         type: FINALIZE_TYPING,
-        payload: wpm,
+        payload: 122,
       });
     }
   }, [phase]);
@@ -51,13 +48,14 @@ function ModeHandler() {
     <div
       className="mode-handler"
       style={{
-        backgroundColor:
-          phase === Phases.typing ? Theme.shadeColor : "transparent",
+        backgroundColor: phase === Phases.typing
+          ? Theme.shadeColor
+          : "transparent",
       }}
     >
       <div className="shared-data">
-        {timer.countdown && <span>{timer.countdown} seconds</span>}
-        {typeof wpm === "number" && <span>{wpm} wpm</span>}
+        {timer.countdown !== null && timer.countdown !== 0 &&
+          <span>{timer.countdown} seconds</span>}
       </div>
       <div className="mode-display">
         {(() => {

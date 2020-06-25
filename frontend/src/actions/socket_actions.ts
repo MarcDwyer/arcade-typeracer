@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { SET_WEBSOCKET } from "../reducers/socket_reducer";
 import { PayloadTypes } from "../enums";
-import { SET_TYPING } from "../reducers/game_reducer";
+import { SET_TYPING } from "../reducers/text_reducer";
 import { WsPayload } from "./action_types";
 import { transformChar } from "../util";
 import { SET_APP_ERROR } from "../reducers/error_reducer";
@@ -10,7 +10,7 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
     try {
       const data: WsPayload = JSON.parse(msg.data);
-      console.log(data)
+      console.log(data);
       const { text, time } = data.payload;
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {

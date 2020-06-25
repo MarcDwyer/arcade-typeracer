@@ -5,18 +5,22 @@ import { ReduxStore } from "../../reducers/main";
 import { Phases, PayloadTypes } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
-import { setTimer } from "../../actions/game_actions";
-import { RESET_GAME } from "../../reducers/game_reducer";
+import { setTimer } from "../../actions/timer_actions";
+import { RESET_GAME } from "../../reducers/text_reducer";
 
 import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
+import { CHANGE_PHASE } from "../../reducers/status_reducer";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
-  const [phase, textData, ws] = useSelector((store: ReduxStore.State) => [
-    store.gameData.status.phase,
-    store.gameData.textData,
+  const [phase, textData, ws, countdown] = useSelector((
+    store: ReduxStore.State,
+  ) => [
+    store.status.phase,
+    store.textData,
     store.socket,
+    store.timer.countdown,
   ]);
   useEffect(() => {
     switch (phase) {
@@ -27,6 +31,24 @@ export default function SinglePlayer() {
     }
   }, [phase, ws]);
 
+  useEffect(() => {
+    if (phase === Phases.waiting && textData.text) {
+      console.log("changing");
+      dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
+    }
+  }, [phase, textData.text]);
+
+  useEffect(() => {
+    if (phase === Phases.countdown && !countdown) {
+      dispatch(
+        setTimer(
+          8,
+          Phases.typing,
+        ),
+      );
+    }
+  }, [phase, countdown]);
+  console.log(phase);
   return (
     <div className="single-player">
       {(() => {
@@ -36,7 +58,7 @@ export default function SinglePlayer() {
               <StandardBtn
                 colorType="default"
                 onClick={() => {
-                  dispatch(setTimer(8, Phases.countdown));
+                  dispatch({ type: CHANGE_PHASE, payload: Phases.countdown });
                 }}
               >
                 Ready?

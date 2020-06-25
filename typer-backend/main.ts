@@ -6,13 +6,14 @@ import {
   WebSocket,
 } from "https://deno.land/std/ws/mod.ts";
 
-import HandleWs from "./ws_handler.ts"
+import HandleMsg from "./msg_handler.ts";
 
 async function handleWs(sock: WebSocket) {
   try {
     for await (const ev of sock) {
       if (typeof ev === "string") {
-        await HandleWs(sock, ev)
+        //@ts-ignore
+        await HandleMsg(sock, ev);
       } else if (ev instanceof Uint8Array) {
         // binary message
         console.log("ws:Binary", ev);
