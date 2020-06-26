@@ -2,18 +2,20 @@ import { Dispatch } from "redux";
 import {
   INC_INDEX,
   SET_ERROR,
+  SET_WPM_PROGRESS,
 } from "../reducers/text_reducer";
 
 import { GetState } from "./action_types";
 import { Phases } from "../enums";
 import { CHANGE_PHASE } from "../reducers/status_reducer";
+import { calcWpm, getProgress } from "../util";
 
 export function handleTyping(char: string) {
   return (dispatch: Dispatch, getState: GetState) => {
-    const { textData } = getState();
+    const { textData, timer } = getState();
     const { text, currIndex, value } = textData;
 
-    if (!text) return;
+    if (!text || !textData.duration || !timer.countdown) return;
     const curr = text[currIndex];
     if (char !== curr.char) {
       dispatch({ type: SET_ERROR, payload: "Incorrect character" });
@@ -41,5 +43,20 @@ export function handleTyping(char: string) {
         payload: Phases.complete,
       });
     }
+  };
+}
+
+export function setWpmProgress() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const { timer, textData } = getState();
+    if (!timer.countdown || !textData.duration || !textData.text) return;
+    const diff = textData.duration - timer.countdown;
+    dispatch({
+      type: SET_WPM_PROGRESS,
+      payload: {
+        wpm: calcWpm(textData.currIndex + 1, diff),
+        progress: getProgress(textData.text.length, textData.currIndex),
+      },
+    });
   };
 }

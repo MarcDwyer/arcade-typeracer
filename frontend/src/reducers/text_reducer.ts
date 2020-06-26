@@ -7,7 +7,8 @@ export type TextData = {
   error: string | null;
   currIndex: number;
   value: string;
-  wpm: number | null;
+  wpm: number;
+  progress: number;
   duration: null | number;
 };
 
@@ -18,14 +19,16 @@ const initState: TextData = {
   error: null,
   currIndex: 0,
   value: "",
-  wpm: null,
+  wpm: 0,
+  progress: 0,
 };
 
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol(),
   FINALIZE_TYPING = Symbol(),
-  RESET_GAME = Symbol();
+  RESET_GAME = Symbol(),
+  SET_WPM_PROGRESS = Symbol();
 
 export default function TextReducer(
   state: TextData = initState,
@@ -42,6 +45,8 @@ export default function TextReducer(
       return { ...state, wpm: payload };
     case RESET_GAME:
       return { ...initState };
+    case SET_WPM_PROGRESS:
+      return { ...state, wpm: payload.wpm, progress: payload.progress };
     default:
       return state;
   }

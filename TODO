@@ -4,3 +4,4 @@
 ✔ Think of a better way to structure the games_reducers @done(20-06-24 05:16)
 ✔ Structure data so it can easily be transmittable to server if multiplayer is selected @started(20-06-24 05:16) @done(20-06-24 05:16) @lasted(43s)
 ☐ Calculate the percentage of text that is typed, track it, and send it to server with wpm @started(20-06-24 05:17)
+☐ Perhaps game state should be local, perhaps an importable reducer and custom hooks look into this

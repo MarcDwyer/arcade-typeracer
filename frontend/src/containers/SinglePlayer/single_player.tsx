@@ -48,7 +48,6 @@ export default function SinglePlayer() {
       );
     }
   }, [phase, countdown]);
-  console.log(phase);
   return (
     <div className="single-player">
       {(() => {

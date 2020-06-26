@@ -19,7 +19,7 @@ export function setTimer(duration: number, nextPhase: PhaseTypes) {
           return;
         }
         let future = countdown - 1;
-        if (!future && nextPhase) {
+        if (!future) {
           dispatch({ type: CHANGE_PHASE, payload: nextPhase });
           dispatch({ type: CLEAR_COUNTDOWN });
           return;

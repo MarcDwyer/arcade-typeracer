@@ -11,4 +11,8 @@ export default class Player {
   setWpm(wpm: number) {
     this.wpm = wpm;
   }
+  get playerData() {
+    const { userName, wpm } = this;
+    return JSON.stringify({ userName, wpm });
+  }
 }
