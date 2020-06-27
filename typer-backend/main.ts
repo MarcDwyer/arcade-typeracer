@@ -3,12 +3,11 @@ import {
   acceptWebSocket,
   isWebSocketCloseEvent,
   isWebSocketPingEvent,
-  WebSocket,
 } from "https://deno.land/std/ws/mod.ts";
 
-import HandleMsg from "./msg_handler.ts";
+import HandleMsg, { MyWebSocket } from "./msg_handler.ts";
 
-async function handleWs(sock: WebSocket) {
+async function handleWs(sock: MyWebSocket) {
   try {
     for await (const ev of sock) {
       if (typeof ev === "string") {
@@ -25,12 +24,15 @@ async function handleWs(sock: WebSocket) {
         // close
         const { code, reason } = ev;
         console.log("ws:Close", code, reason);
+        const didDel = sock.room.players.delete(sock.player.g);
+        console.log(didDel);
       }
     }
   } catch (err) {
     console.error(`failed to receive frame: ${err}`);
     if (!sock.isClosed) {
       await sock.close(1000).catch(console.error);
+      sock.room.players.delete(sock.player.userKey);
     }
   }
 }
@@ -47,6 +49,7 @@ if (import.meta.main) {
       bufWriter,
       headers,
     })
+      //@ts-ignore
       .then(handleWs)
       .catch(async (err) => {
         console.error(`failed to accept websocket: ${err}`);

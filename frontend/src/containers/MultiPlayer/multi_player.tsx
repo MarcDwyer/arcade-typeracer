@@ -3,31 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReduxStore } from "../../reducers/main";
 import { Phases } from "../../enums";
 
-import { StandardBtn } from "../../styled-components/buttons";
-import { UserNameInput } from "../../styled-components/inputs";
+import EnterDisplayName from "../../components/EnterDisplatName/enter_display";
 
 export default function MultiPlayer() {
-  const dispatch = useDispatch();
-
-  const [userName, setUserName] = useState<string>("");
-
-  const [phase] = useSelector((
+  const [phase, ws] = useSelector((
     store: ReduxStore.State,
-  ) => [store.status.phase]);
+  ) => [store.status.phase, store.socket]);
   console.log(phase);
   return (
     <div className="multi">
-      {(() => {
+      {ws && (() => {
         switch (phase) {
           case Phases.waiting:
-            return (
-              <UserNameInput
-                value={userName}
-                color="white"
-                onChange={(e) => setUserName(e.target.value)}
-                placeholder="Enter a display name"
-              />
-            );
+            return <EnterDisplayName ws={ws} />;
           default:
             return <span>Case not found for phase</span>;
         }

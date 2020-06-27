@@ -14,4 +14,5 @@ export enum Phases {
 export enum PayloadTypes {
   single_typing_text = "singletypingtext",
   joinRoom = "joinroom",
+  roomData = "roomdata",
 }

@@ -1,18 +1,39 @@
-export default class Player {
-  public wpm: number = 0;
-  public progress: number = 0;
+import { MyWebSocket } from "./msg_handler.ts";
 
+export type PlayerStats = {
+  wpm: number;
+  username: string;
+  progress: number;
+};
+
+export type PlayerData = {
+  wpm: number;
+  username: string;
+  progress: number;
+  userKey: number;
+  roomKey: string;
+};
+
+export default class Player {
+  private wpm: number = 0;
+  private progress: number = 0;
   constructor(
-    public userName: string,
+    private username: string,
     public userKey: number,
-    public roomKey: string
+    private roomKey: string,
+    public ws: MyWebSocket
   ) {}
 
   setWpm(wpm: number) {
     this.wpm = wpm;
   }
-  get playerData() {
-    const { userName, wpm } = this;
-    return JSON.stringify({ userName, wpm });
+  get playerStats(): PlayerStats {
+    //@ts-ignore
+    const { username, wpm, progress } = this;
+    return { username, wpm, progress };
+  }
+  get playerData(): PlayerData {
+    const { username, roomKey, userKey, wpm, progress } = this;
+    return { username, roomKey, userKey, wpm, progress };
   }
 }

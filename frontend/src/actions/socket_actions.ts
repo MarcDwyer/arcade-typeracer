@@ -11,10 +11,10 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
     try {
       const data: WsPayload = JSON.parse(msg.data);
       console.log(data);
-      const { text, time } = data.payload;
       if (!("type" in data)) throw "No type property in payload";
       switch (data.type) {
         case PayloadTypes.single_typing_text:
+          const { text, time } = data.payload;
           dispatch({
             type: SET_TYPING,
             payload: {
@@ -23,6 +23,8 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
             },
           });
           break;
+        case PayloadTypes.roomData:
+          console.log("triggered roomdata");
       }
     } catch (e) {
       console.error(e);

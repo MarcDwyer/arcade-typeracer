@@ -11,6 +11,7 @@ const sharedInputStyles = css`
 
 export const MyInput = styled.input<PMyInput>`
     ${sharedInputStyles}
+    color: #eee;
 `;
 
 type PMyInput = {

@@ -1,16 +1,18 @@
 import { WebSocket } from "https://deno.land/std/ws/mod.ts";
 import { PayloadTypes } from "./enums.ts";
 import { textData } from "./typing_data.ts";
-import Room from "./rooms.ts";
-import Player from "./player.ts";
+import Player, { PlayerData } from "./player.ts";
+
+import room, { Room } from "./rooms.ts";
 
 type Data = {
   type: string;
   payload: any;
 };
 
-interface MyWebSocket extends WebSocket {
-  playerData: Player;
+export interface MyWebSocket extends WebSocket {
+  player: Player;
+  room: Room;
 }
 
 export default async function HandleMsg(ws: MyWebSocket, msg: string) {
@@ -28,9 +30,13 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
       break;
     case PayloadTypes.joinRoom:
       const { username } = data.payload;
-      const playerData = Room.joinRoom(username);
-      ws.playerData = playerData;
-      await ws.send(JSON.stringify({ ...ws.playerData }));
+      const { player, players } = room.joinRoom(username, ws);
+      await ws.send(
+        JSON.stringify({
+          payload: { player, players },
+          type: PayloadTypes.roomData,
+        })
+      );
       break;
     default:
       console.log("No case found for " + data.type);
