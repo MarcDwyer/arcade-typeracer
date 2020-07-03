@@ -1,0 +1,1 @@
+Use maps instead of Objects as maps seem to be similar to memory pointers in Go.

@@ -1,0 +1,2 @@
+☐ When a player disconnects before completing typing test their isConnected boolean should be set to false.
+☐ Player disconnects and connects should be broadcasted to connected players to keep clients state updated.

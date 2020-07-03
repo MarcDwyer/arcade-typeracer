@@ -4,6 +4,7 @@ export type PlayerStats = {
   wpm: number;
   username: string;
   progress: number;
+  isConnected: boolean;
 };
 
 export type PlayerData = {
@@ -17,11 +18,12 @@ export type PlayerData = {
 export default class Player {
   private wpm: number = 0;
   private progress: number = 0;
+  public isConnected: boolean = true;
   constructor(
     private username: string,
     public userKey: number,
     private roomKey: string,
-    public ws: MyWebSocket
+    public ws: MyWebSocket,
   ) {}
 
   setWpm(wpm: number) {
@@ -29,11 +31,11 @@ export default class Player {
   }
   get playerStats(): PlayerStats {
     //@ts-ignore
-    const { username, wpm, progress } = this;
-    return { username, wpm, progress };
+    const { username, wpm, progress, isConnected } = this;
+    return { username, wpm, progress, isConnected };
   }
   get playerData(): PlayerData {
-    const { username, roomKey, userKey, wpm, progress } = this;
+    const { username, roomKey, userKey, wpm, progress, isConnected } = this;
     return { username, roomKey, userKey, wpm, progress };
   }
 }

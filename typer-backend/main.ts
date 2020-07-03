@@ -25,15 +25,14 @@ async function handleWs(sock: MyWebSocket) {
         // close
         const { code, reason } = ev;
         console.log("ws:Close", code, reason);
-        const didDel = room.players.delete(player.userKey);
-        console.log(didDel);
+        player.isConnected = false;
       }
     }
   } catch (err) {
     console.error(`failed to receive frame: ${err}`);
+    sock.room.players.delete(sock.player.userKey);
     if (!sock.isClosed) {
       await sock.close(1000).catch(console.error);
-      sock.room.players.delete(sock.player.userKey);
     }
   }
 }
