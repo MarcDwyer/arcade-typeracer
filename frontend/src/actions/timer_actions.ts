@@ -37,3 +37,10 @@ export function setTimer(duration: number, nextPhase: PhaseTypes) {
     });
   };
 }
+
+export function hackTimer() {
+  return {
+    type: UPDATE_COUNTDOWN,
+    payload: 3,
+  };
+}

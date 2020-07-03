@@ -4,13 +4,19 @@ import { useParams } from "react-router";
 import SinglePlayer from "../SinglePlayer/single_player";
 import MultiPlayer from "../MultiPlayer/multi_player";
 
+import {
+  GameDataDiv,
+  ModeHandlerDiv,
+  ModeDisplayDiv,
+  CountDownDiv,
+} from "../../styled-components/mode_handler_styles";
+
 import { RouteModes, Phases } from "../../enums";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
-import { setTimer } from "../../actions/timer_actions";
+import { setTimer, hackTimer } from "../../actions/timer_actions";
 
-import { Theme } from "../../themes/theme_colors.";
 import { setWpmProgress } from "../../actions/typing_actions";
 import { CLEAR_COUNTDOWN } from "../../reducers/timer_reducer";
 
@@ -24,6 +30,14 @@ function ModeHandler() {
     store.timer,
     store.textData,
   ]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.keyCode === 57) {
+        dispatch(hackTimer());
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (textData.duration && phase === Phases.typing && !timer.countdown) {
@@ -48,22 +62,30 @@ function ModeHandler() {
     }
   }, [timer.countdown, phase]);
 
+  const displayStats = phase === Phases.complete || phase === Phases.typing;
+
   return (
-    <div
-      className="mode-handler"
-      style={{
-        backgroundColor: phase === Phases.typing
-          ? Theme.shadeColor
-          : "transparent",
-      }}
+    <ModeHandlerDiv
+      bgColor={phase !== Phases.typing ? "transparent" : undefined}
     >
       <div className="shared-data">
-        {timer.countdown !== null && timer.countdown !== 0 &&
-          <span>{timer.countdown} seconds</span>}
-        {textData.wpm !== 0 && <span>{textData.wpm} wpm</span>}
-        {textData.progress !== 0 && <span>{textData.progress}%</span>}
+        {timer.countdown !== 0 && typeof timer.countdown === "number" && (
+          <CountDownDiv
+            margin={phase === Phases.countdown ? "auto" : undefined}
+          >
+            <span>{timer.countdown} seconds remaining</span>
+          </CountDownDiv>
+        )}
+        {displayStats && (
+          <GameDataDiv>
+            <h3>Typing stats</h3>
+            {textData.wpm !== 0 && <span>WPM: {textData.wpm}</span>}
+            {textData.progress &&
+              <span>Progress: {textData.progress}%</span>}
+          </GameDataDiv>
+        )}
       </div>
-      <div className="mode-display">
+      <ModeDisplayDiv>
         {(() => {
           switch (mode) {
             case RouteModes.single:
@@ -74,8 +96,8 @@ function ModeHandler() {
               return <span>Path not found</span>;
           }
         })()}
-      </div>
-    </div>
+      </ModeDisplayDiv>
+    </ModeHandlerDiv>
   );
 }
 

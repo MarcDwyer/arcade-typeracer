@@ -28,7 +28,8 @@ export const INC_INDEX = Symbol(),
   SET_TYPING = Symbol(),
   FINALIZE_TYPING = Symbol(),
   RESET_GAME = Symbol(),
-  SET_WPM_PROGRESS = Symbol();
+  SET_WPM_PROGRESS = Symbol(),
+  RESET_TEXT = Symbol();
 
 export default function TextReducer(
   state: TextData = initState,
@@ -47,6 +48,8 @@ export default function TextReducer(
       return { ...initState };
     case SET_WPM_PROGRESS:
       return { ...state, wpm: payload.wpm, progress: payload.progress };
+    case RESET_TEXT:
+      return { ...initState };
     default:
       return state;
   }

@@ -6,11 +6,11 @@ import { Phases, PayloadTypes } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
 import { setTimer } from "../../actions/timer_actions";
-import { RESET_GAME } from "../../reducers/text_reducer";
 
 import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
 import { CHANGE_PHASE } from "../../reducers/status_reducer";
+import { setPhasers } from "../../actions/status_actions";
 
 export default function SinglePlayer() {
   const dispatch = useDispatch();
@@ -71,7 +71,9 @@ export default function SinglePlayer() {
             return (
               <CompletedMsg>
                 <span>You have completed the race!</span>
-                <TryAgain onClick={() => dispatch({ type: RESET_GAME })}>
+                <TryAgain
+                  onClick={() => dispatch(setPhasers(Phases.waiting))}
+                >
                   Try Again?
                 </TryAgain>
               </CompletedMsg>

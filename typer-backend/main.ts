@@ -10,6 +10,7 @@ import HandleMsg, { MyWebSocket } from "./msg_handler.ts";
 async function handleWs(sock: MyWebSocket) {
   try {
     for await (const ev of sock) {
+      const { room, player } = sock;
       if (typeof ev === "string") {
         //@ts-ignore
         await HandleMsg(sock, ev);
@@ -24,7 +25,7 @@ async function handleWs(sock: MyWebSocket) {
         // close
         const { code, reason } = ev;
         console.log("ws:Close", code, reason);
-        const didDel = sock.room.players.delete(sock.player.g);
+        const didDel = room.players.delete(player.userKey);
         console.log(didDel);
       }
     }

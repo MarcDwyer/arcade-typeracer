@@ -5,15 +5,12 @@
 
 .shared-data {
   display: flex;
-  flex-direction: column;
-
-  * {
-    margin-bottom: 2.5px;
-  }
+  width: 100%;
 }
 
 .mode-handler {
   margin: auto;
   padding: 25px 25px;
   max-width: 750px;
+  position: relative;
 }
