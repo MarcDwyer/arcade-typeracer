@@ -12,7 +12,6 @@ type Data = {
 
 export interface MyWebSocket extends WebSocket {
   player: Player;
-  room: Room;
 }
 
 export default async function HandleMsg(ws: MyWebSocket, msg: string) {
@@ -25,17 +24,20 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
         JSON.stringify({
           type: PayloadTypes.singleTypingText,
           payload: randomTxt,
-        })
+        }),
       );
       break;
     case PayloadTypes.joinRoom:
       const { username } = data.payload;
-      const { player, players } = room.joinRoom(username, ws);
+      room.joinRoom(username, ws);
       await ws.send(
         JSON.stringify({
-          payload: { player, players },
+          payload: {
+            player: ws.player.playerData,
+            players: ws.player.room.playerStatsList(),
+          },
           type: PayloadTypes.roomData,
-        })
+        }),
       );
       break;
     default:

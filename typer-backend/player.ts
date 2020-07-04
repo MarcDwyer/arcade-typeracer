@@ -1,4 +1,5 @@
 import { MyWebSocket } from "./msg_handler.ts";
+import { Room } from "./rooms.ts";
 
 export type PlayerStats = {
   wpm: number;
@@ -22,7 +23,7 @@ export default class Player {
   constructor(
     private username: string,
     public userKey: number,
-    private roomKey: string,
+    public room: Room,
     public ws: MyWebSocket,
   ) {}
 
@@ -35,7 +36,7 @@ export default class Player {
     return { username, wpm, progress, isConnected };
   }
   get playerData(): PlayerData {
-    const { username, roomKey, userKey, wpm, progress, isConnected } = this;
-    return { username, roomKey, userKey, wpm, progress };
+    const { username, room, userKey, wpm, progress } = this;
+    return { username, roomKey: room.roomId, userKey, wpm, progress };
   }
 }

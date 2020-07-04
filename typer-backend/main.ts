@@ -10,7 +10,6 @@ import HandleMsg, { MyWebSocket } from "./msg_handler.ts";
 async function handleWs(sock: MyWebSocket) {
   try {
     for await (const ev of sock) {
-      const { room, player } = sock;
       if (typeof ev === "string") {
         //@ts-ignore
         await HandleMsg(sock, ev);
@@ -25,13 +24,13 @@ async function handleWs(sock: MyWebSocket) {
         // close
         const { code, reason } = ev;
         console.log("ws:Close", code, reason);
-        player.isConnected = false;
+        if (sock.player) sock.player.isConnected = false;
       }
     }
   } catch (err) {
     console.error(`failed to receive frame: ${err}`);
-    sock.room.players.delete(sock.player.userKey);
     if (!sock.isClosed) {
+      if (sock.player) sock.player.isConnected = false;
       await sock.close(1000).catch(console.error);
     }
   }

@@ -27,7 +27,6 @@ export const ModeHandlerDiv = styled.div<PModeHandler>`
   min-width: 850px;
   display: flex;
   flex-direction: column;
-  border: solid 1px green;
   margin: auto;
   padding: 15px 15px;
 `;
@@ -42,7 +41,7 @@ type PCountDownDiv = {
 };
 export const CountDownDiv = styled.div<PCountDownDiv>`
   display: flex;
-   margin: ${(p) => p.margin || "auto auto auto 15px"};
+   margin: ${(p) => p.margin || "auto auto auto 20px"};
    order: 1;
 
    span {

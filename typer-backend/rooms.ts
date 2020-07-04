@@ -1,6 +1,7 @@
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import Player, { PlayerData, PlayerStats } from "./player.ts";
 import { MyWebSocket } from "./msg_handler.ts";
+import { Phases, PhaseTypes } from "./enums.ts";
 // Why am i not using maps
 class Rooms {
   public rooms: Map<string, Room> = new Map();
@@ -31,33 +32,33 @@ export class Room {
   private playerCount: number = 0;
   public filled: boolean = false;
   public players: Map<number, Player> = new Map();
+  public phase: PhaseTypes = Phases.waiting;
   constructor(public roomId: string) {}
 
   addPlayer(user: string, ws: MyWebSocket): AddPlayerData {
+    // Count is used as key to avoid naming conflicts within the map
     let count = ++this.playerCount;
     if (count >= 8) {
       this.filled = true;
     }
-    const newPlayer = new Player(user, count, this.roomId, ws);
+    const newPlayer = new Player(user, count, this, ws);
     const player = this.players.set(count, newPlayer).get(count);
     //@ts-ignore
     ws.player = player;
-    ws.room = this;
+    console.log("tagged ", newPlayer.userKey);
     return {
       //@ts-ignore
       player: player?.playerData,
       //@ts-ignore
-      players: this.getPlayerStatsList(player?.userKey),
+      players: this.playerStatsList(player.userKey),
     };
   }
-  getPlayerStatsList(currPlayer: number): PlayerStats[] {
-    const pData: PlayerStats[] = [];
+  playerStatsList(): PlayerStats[] {
+    const playerStats = [];
     for (const player of this.players.values()) {
-      if (player.userKey !== currPlayer) {
-        pData.push(player.playerStats);
-      }
+      playerStats.push(player.playerStats);
     }
-    return pData;
+    return playerStats;
   }
 }
 
