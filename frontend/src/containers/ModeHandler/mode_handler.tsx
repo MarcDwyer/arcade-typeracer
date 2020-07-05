@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+
+import { isDev } from "../../util";
 
 import SinglePlayer from "../SinglePlayer/single_player";
 import MultiPlayer from "../MultiPlayer/multi_player";
@@ -12,7 +15,6 @@ import {
 } from "../../styled-components/mode_handler_styles";
 
 import { RouteModes, Phases } from "../../enums";
-import { useDispatch, useSelector } from "react-redux";
 
 import { ReduxStore } from "../../reducers/main";
 import { setTimer, hackTimer } from "../../actions/timer_actions";
@@ -63,6 +65,10 @@ function ModeHandler() {
   }, [timer.countdown, phase]);
 
   const displayStats = phase === Phases.complete || phase === Phases.typing;
+
+  if (!isDev()) {
+    return <span>still working on module</span>;
+  }
 
   return (
     <ModeHandlerDiv

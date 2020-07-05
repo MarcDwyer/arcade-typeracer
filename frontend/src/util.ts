@@ -53,3 +53,5 @@ export function calcWpm(totalChar: number, seconds: number) {
 export function getProgress(totalChar: number, currChar: number) {
   return roundTenth((currChar / totalChar) * 100);
 }
+
+export const isDev = () => process.env.NODE_ENV === "development";

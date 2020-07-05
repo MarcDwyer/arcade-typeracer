@@ -3,9 +3,9 @@ import { Room } from "./rooms.ts";
 
 export type PlayerStats = {
   wpm: number;
-  username: string;
   progress: number;
   isConnected: boolean;
+  username: string;
 };
 
 export type PlayerData = {
@@ -24,11 +24,15 @@ export default class Player {
     private username: string,
     public userKey: number,
     public room: Room,
-    public ws: MyWebSocket,
+    public ws: MyWebSocket | null,
   ) {}
 
   setWpm(wpm: number) {
     this.wpm = wpm;
+  }
+  handleDisconnect() {
+    this.ws = null;
+    this.isConnected = false;
   }
   get playerStats(): PlayerStats {
     //@ts-ignore

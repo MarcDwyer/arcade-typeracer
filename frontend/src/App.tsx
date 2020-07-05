@@ -5,6 +5,8 @@ import ModeHandler from "./containers/ModeHandler/mode_handler";
 import Homepage from "./containers/Homepage/home";
 import ErrorModal from "./containers/Error_Modal/error_modal";
 
+import { isDev } from "./util";
+
 import { Theme } from "./themes/theme_colors.";
 import { useDispatch } from "react-redux";
 import { setWs } from "./actions/socket_actions";
@@ -12,11 +14,11 @@ import { setWs } from "./actions/socket_actions";
 import "./App.scss";
 
 // Number of words typed / time taken to complete
+
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const isDev = process.env.NODE_ENV === "development";
-    dispatch(setWs(isDev));
+    dispatch(setWs(isDev()));
   }, []);
 
   return (
