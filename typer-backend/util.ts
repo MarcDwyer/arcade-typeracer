@@ -1,8 +1,5 @@
-const doSomething = () => {
-    const obj: any = {};
-    let num = 0
-    obj[++num] = "something"
-    return [num, obj]
-}
+import { textData } from "./typing_data.ts";
 
-console.log(doSomething())
+export function randomTxt() {
+  return textData[Math.floor(Math.random() * textData.length)];
+}

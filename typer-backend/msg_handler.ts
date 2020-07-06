@@ -1,9 +1,10 @@
 import { WebSocket } from "https://deno.land/std/ws/mod.ts";
-import { PayloadTypes } from "./enums.ts";
-import { textData } from "./typing_data.ts";
+import { PayloadTypes, PhaseTypes } from "./enums.ts";
 import Player, { PlayerData } from "./player.ts";
 
-import room, { Room } from "./rooms.ts";
+import room from "./rooms.ts";
+import { randomTxt } from "./util.ts";
+import { TextData } from "./typing_data.ts";
 
 type Data = {
   type: string;
@@ -19,11 +20,10 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
 
   switch (data.type) {
     case PayloadTypes.singleTypingText:
-      const randomTxt = textData[Math.floor(Math.random() * textData.length)];
       await ws.send(
         JSON.stringify({
           type: PayloadTypes.singleTypingText,
-          payload: randomTxt,
+          payload: randomTxt(),
         }),
       );
       break;
@@ -32,11 +32,8 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
       room.joinRoom(username, ws);
       await ws.send(
         JSON.stringify({
-          payload: {
-            player: ws.player.playerData,
-            players: ws.player.room.playerStatsList(),
-          },
           type: PayloadTypes.roomData,
+          payload: ws.player.initData,
         }),
       );
       break;

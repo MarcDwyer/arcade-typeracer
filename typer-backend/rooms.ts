@@ -1,18 +1,19 @@
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
-import Player, { PlayerData, PlayerStats } from "./player.ts";
+import Player, { PlayerStats } from "./player.ts";
 import { MyWebSocket } from "./msg_handler.ts";
 import { Phases, PhaseTypes } from "./enums.ts";
+import { randomTxt } from "./util.ts";
+import { TextData } from "./typing_data.ts";
 // Why am i not using maps
 class Rooms {
   public rooms: Map<string, Room> = new Map();
   private lastRoom: Room | undefined;
 
-  joinRoom(user: string, ws: MyWebSocket): AddPlayerData {
-    if (!this.lastRoom || this.lastRoom.filled) {
+  joinRoom(user: string, ws: MyWebSocket) {
+    if (!this.lastRoom || this.lastRoom.phase !== Phases.waiting) {
       this.lastRoom = this.createRoom();
     }
-    const playerData = this.lastRoom.addPlayer(user, ws);
-    return playerData;
+    this.lastRoom.addPlayer(user, ws);
   }
   private createRoom(): Room {
     const id = v4.generate();
@@ -24,34 +25,25 @@ class Rooms {
   }
 }
 
-type AddPlayerData = {
-  player: PlayerData;
-  players: PlayerStats[];
-};
 export class Room {
   private playerCount: number = 0;
-  public filled: boolean = false;
+  public text: TextData = randomTxt();
   public players: Map<number, Player> = new Map();
   public phase: PhaseTypes = Phases.waiting;
+
   constructor(public roomId: string) {}
 
-  addPlayer(user: string, ws: MyWebSocket): AddPlayerData {
+  addPlayer(user: string, ws: MyWebSocket): void {
     // Count is used as key to avoid naming conflicts within the map
     let count = ++this.playerCount;
     if (count >= 8) {
-      this.filled = true;
+      this.phase = Phases.loaded;
     }
     const newPlayer = new Player(user, count, this, ws);
     const player = this.players.set(count, newPlayer).get(count);
     //@ts-ignore
     ws.player = player;
     console.log("tagged ", newPlayer.userKey);
-    return {
-      //@ts-ignore
-      player: player?.playerData,
-      //@ts-ignore
-      players: this.playerStatsList(player.userKey),
-    };
   }
   playerStatsList(): PlayerStats[] {
     const playerStats = [];
@@ -59,6 +51,14 @@ export class Room {
       playerStats.push(player.playerStats);
     }
     return playerStats;
+  }
+  async broadcast(data: any, notPlayer: number) {
+    data = JSON.stringify(data);
+    for (const player of this.players.values()) {
+      if (player.userKey !== notPlayer && player.ws) {
+        await player.ws.send(data).catch((err) => console.log(err));
+      }
+    }
   }
 }
 

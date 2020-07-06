@@ -15,4 +15,6 @@ export enum PayloadTypes {
   single_typing_text = "singletypingtext",
   joinRoom = "joinroom",
   roomData = "roomdata",
+  phaseChange = "phasechange",
+  updatePlayers = "updateplayers",
 }

@@ -1,5 +1,7 @@
 import { MyWebSocket } from "./msg_handler.ts";
 import { Room } from "./rooms.ts";
+import { TextData } from "./typing_data.ts";
+import { PhaseTypes } from "./enums.ts";
 
 export type PlayerStats = {
   wpm: number;
@@ -9,11 +11,15 @@ export type PlayerStats = {
 };
 
 export type PlayerData = {
-  wpm: number;
   username: string;
-  progress: number;
   userKey: number;
   roomKey: string;
+};
+
+type InitData = {
+  text: TextData;
+  playerData: PlayerData;
+  phase: PhaseTypes;
 };
 
 export default class Player {
@@ -40,7 +46,14 @@ export default class Player {
     return { username, wpm, progress, isConnected };
   }
   get playerData(): PlayerData {
-    const { username, room, userKey, wpm, progress } = this;
-    return { username, roomKey: room.roomId, userKey, wpm, progress };
+    const { username, room, userKey } = this;
+    return { username, roomKey: room.roomId, userKey };
+  }
+  get initData(): InitData {
+    return {
+      text: this.room.text,
+      phase: this.room.phase,
+      playerData: this.playerData,
+    };
   }
 }
