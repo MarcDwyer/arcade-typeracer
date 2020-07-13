@@ -2,6 +2,7 @@ export enum PayloadTypes {
   singleTypingText = "singletypingtext",
   joinRoom = "joinroom",
   roomData = "roomdata",
+  phaseChange = "phaseChange",
 }
 
 export enum SingleTypes {

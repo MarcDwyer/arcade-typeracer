@@ -1,7 +1,7 @@
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import Player, { PlayerStats } from "./player.ts";
 import { MyWebSocket } from "./msg_handler.ts";
-import { Phases, PhaseTypes } from "./enums.ts";
+import { Phases, PhaseTypes, PayloadTypes } from "./enums.ts";
 import { randomTxt } from "./util.ts";
 import { TextData } from "./typing_data.ts";
 // Why am i not using maps
@@ -36,8 +36,9 @@ export class Room {
   addPlayer(user: string, ws: MyWebSocket): void {
     // Count is used as key to avoid naming conflicts within the map
     let count = ++this.playerCount;
-    if (count >= 8) {
+    if (count >= 2) {
       this.phase = Phases.loaded;
+      this.broadcast({ type: PayloadTypes.phaseChange, phase: this.phase });
     }
     const newPlayer = new Player(user, count, this, ws);
     const player = this.players.set(count, newPlayer).get(count);
@@ -52,12 +53,10 @@ export class Room {
     }
     return playerStats;
   }
-  async broadcast(data: any, notPlayer: number) {
+  async broadcast(data: any, notPlayer?: number) {
     data = JSON.stringify(data);
     for (const player of this.players.values()) {
-      if (player.userKey !== notPlayer && player.ws) {
-        await player.ws.send(data).catch((err) => console.log(err));
-      }
+      await player.ws?.send(data).catch((err) => console.log(err));
     }
   }
 }

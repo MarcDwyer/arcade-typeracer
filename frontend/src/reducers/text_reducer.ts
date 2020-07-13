@@ -22,7 +22,6 @@ const initState: TextData = {
   wpm: 0,
   progress: 0,
 };
-
 export const INC_INDEX = Symbol(),
   SET_ERROR = Symbol(),
   SET_TYPING = Symbol(),
