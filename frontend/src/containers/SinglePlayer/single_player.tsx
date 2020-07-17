@@ -11,8 +11,8 @@ import { CompletedMsg } from "../../styled-components/game_styles";
 import { CHANGE_PHASE } from "../../reducers/status_reducer";
 import { setPhasers } from "../../actions/status_actions";
 
-import GameStore, { GameData } from "../../stores/gameStore";
 import SocketStore from "../../stores/socketStore";
+import PhaseStore from "../../stores/phaseStore";
 
 const SinglePlayer = observer(() => {
   // const dispatch = useDispatch();
@@ -24,9 +24,8 @@ const SinglePlayer = observer(() => {
   //   store.socket,
   //   store.timer.countdown,
   // ]);
-  const gameStore = useContext(GameStore);
   const { socket } = useContext(SocketStore);
-  const { phase, text } = gameStore.game;
+  const phase = useContext(PhaseStore);
   useEffect(() => {
     switch (phase) {
       case Phases.waiting:

@@ -4,5 +4,4 @@
 ✔ Think of a better way to structure the games_reducers @done(20-06-24 05:16)
 ✔ Structure data so it can easily be transmittable to server if multiplayer is selected @started(20-06-24 05:16) @done(20-06-24 05:16) @lasted(43s)
 ✔ Calculate the percentage of text that is typed, track it, and send it to server with wpm @started(20-06-24 05:17) @done(20-07-09 17:45) @lasted(2w1d12h28m17s)
-✔ Perhaps game state should be local, perhaps an importable reducer and custom hooks look into this @done(20-07-09 17:45)
-☐ How the hell do i test the rooms?
+✔ Perhaps game state should be local, perhaps an importable reducer and custom hooks look into this @done(20-07-17 04:52)

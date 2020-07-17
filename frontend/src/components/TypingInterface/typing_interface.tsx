@@ -12,14 +12,15 @@ import { MyInput } from "../../styled-components/inputs";
 
 import "./typing_interface.scss";
 import { Phases } from "../../enums";
+import { Character } from "../../util";
 
 type Props = {
   textData: TextData;
+  text: Character[];
   phase: PhaseTypes;
 };
 
-function TypingInterface(props: Props) {
-  const dispatch = useDispatch();
+function TypingInterface({ text, phase }: Props) {
   const { text, value, error } = props.textData;
   const inputRef = useRef<HTMLInputElement | null>();
   useEffect(() => {

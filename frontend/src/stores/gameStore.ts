@@ -1,7 +1,6 @@
-import { observable, action, extendObservable } from "mobx";
+import { observable, action } from "mobx";
 import { Character } from "../util";
 import { createContext } from "react";
-import { Phases } from "../enums";
 
 type PlayerStats = {
   wpm: number;
@@ -20,17 +19,14 @@ type Multi = {
   playerData: PlayerData | null;
 };
 
-type KeysOfPhases = keyof typeof Phases;
-export type PhaseTypes = typeof Phases[KeysOfPhases];
-
 class Game {
-  phase: PhaseTypes = Phases.waiting;
   text: Character[] | null = null;
   wordCount: number = 0;
   currIndex: number = 0;
   value: string = "";
   wpm: number = 0;
   progress: number = 0;
+  error: string | null = null;
   duration: null | number = null;
   multi: Multi = {
     playerData: null,
