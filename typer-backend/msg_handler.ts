@@ -1,10 +1,9 @@
 import { WebSocket } from "https://deno.land/std/ws/mod.ts";
-import { PayloadTypes, PhaseTypes } from "./enums.ts";
-import Player, { PlayerData } from "./player.ts";
+import { PayloadTypes } from "./enums.ts";
+import Player from "./player.ts";
 
 import room from "./rooms.ts";
 import { randomTxt } from "./util.ts";
-import { TextData } from "./typing_data.ts";
 
 type Data = {
   type: string;

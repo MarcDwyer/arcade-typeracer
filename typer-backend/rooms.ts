@@ -41,10 +41,8 @@ export class Room {
       this.broadcast({ type: PayloadTypes.phaseChange, phase: this.phase });
     }
     const newPlayer = new Player(user, count, this, ws);
-    const player = this.players.set(count, newPlayer).get(count);
-    //@ts-ignore
-    ws.player = player;
-    console.log("tagged ", newPlayer.userKey);
+    this.players.set(count, newPlayer);
+    ws.player = newPlayer;
   }
   playerStatsList(): PlayerStats[] {
     const playerStats = [];
@@ -53,10 +51,12 @@ export class Room {
     }
     return playerStats;
   }
-  async broadcast(data: any, notPlayer?: number) {
+  async broadcast(data: any) {
     data = JSON.stringify(data);
     for (const player of this.players.values()) {
-      await player.ws?.send(data).catch((err) => console.log(err));
+      if (player.ws && !player.ws.isClosed) {
+        await player.ws.send(data).catch((err) => console.log(err));
+      }
     }
   }
 }

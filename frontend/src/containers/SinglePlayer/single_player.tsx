@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useContext } from "react";
+import { observer } from "mobx-react";
 
-import { ReduxStore } from "../../reducers/main";
 import { Phases, PayloadTypes } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
@@ -12,42 +11,39 @@ import { CompletedMsg } from "../../styled-components/game_styles";
 import { CHANGE_PHASE } from "../../reducers/status_reducer";
 import { setPhasers } from "../../actions/status_actions";
 
-export default function SinglePlayer() {
-  const dispatch = useDispatch();
-  const [phase, textData, ws, countdown] = useSelector((
-    store: ReduxStore.State,
-  ) => [
-    store.status.phase,
-    store.textData,
-    store.socket,
-    store.timer.countdown,
-  ]);
+import GameStore, { GameData } from "../../stores/gameStore";
+import SocketStore from "../../stores/socketStore";
+
+const SinglePlayer = observer(() => {
+  // const dispatch = useDispatch();
+  // const [phase, textData, ws, countdown] = useSelector((
+  //   store: ReduxStore.State,
+  // ) => [
+  //   store.status.phase,
+  //   store.textData,
+  //   store.socket,
+  //   store.timer.countdown,
+  // ]);
+  const gameStore = useContext(GameStore);
+  const { socket } = useContext(SocketStore);
+  const { phase, text } = gameStore.game;
   useEffect(() => {
     switch (phase) {
       case Phases.waiting:
-        if (ws) {
-          ws.send(JSON.stringify({ type: PayloadTypes.single_typing_text }));
+        if (socket) {
+          socket.send(
+            JSON.stringify({ type: PayloadTypes.single_typing_text }),
+          );
         }
     }
-  }, [phase, ws]);
+  }, [phase, socket]);
 
   useEffect(() => {
-    if (phase === Phases.waiting && textData.text) {
+    if (phase === Phases.waiting && text) {
       console.log("changing");
-      dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
+      // dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
     }
-  }, [phase, textData.text]);
-
-  useEffect(() => {
-    if (phase === Phases.countdown && !countdown) {
-      dispatch(
-        setTimer(
-          8,
-          Phases.typing,
-        ),
-      );
-    }
-  }, [phase, countdown]);
+  }, [phase, text]);
   return (
     <div className="single-player">
       {(() => {
@@ -56,9 +52,7 @@ export default function SinglePlayer() {
             return (
               <StandardBtn
                 colorType="default"
-                onClick={() => {
-                  dispatch({ type: CHANGE_PHASE, payload: Phases.countdown });
-                }}
+                onClick={() => gameStore.game.phase = Phases.countdown}
               >
                 Ready?
               </StandardBtn>
@@ -72,7 +66,10 @@ export default function SinglePlayer() {
               <CompletedMsg>
                 <span>You have completed the race!</span>
                 <TryAgain
-                  onClick={() => dispatch(setPhasers(Phases.waiting))}
+                  onClick={() => {
+                    //reset game state here
+                    gameStore.reset();
+                  }}
                 >
                   Try Again?
                 </TryAgain>
@@ -86,4 +83,6 @@ export default function SinglePlayer() {
       })()}
     </div>
   );
-}
+});
+
+export default SinglePlayer;

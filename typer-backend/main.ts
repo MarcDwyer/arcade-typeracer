@@ -12,7 +12,7 @@ async function handleWs(sock: MyWebSocket) {
     for await (const ev of sock) {
       if (typeof ev === "string") {
         //@ts-ignore
-        await HandleMsg(sock, ev);
+        HandleMsg(sock, ev);
       } else if (ev instanceof Uint8Array) {
         // binary message
         console.log("ws:Binary", ev);

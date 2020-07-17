@@ -1,30 +1,37 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { ReduxStore } from "../../reducers/main";
+import React, { useContext, useEffect } from "react";
 import { Theme } from "../../themes/theme_colors.";
 import { useSpring, animated } from "react-spring";
+import { observer } from "mobx-react";
+
+import ErrorStore from "../../stores/errorStore";
 
 import "./error_modal.scss";
 
-function ErrorModal() {
-  const error = useSelector((store: ReduxStore.State) => store.error);
+const ErrorModal = observer(() => {
+  const errStore = useContext(ErrorStore);
   const errorDiv = useSpring({
     from: {
       transform: "translateX(+100%)",
     },
     transform: "translateX(0%)",
-    reverse: error === null,
+    reverse: errStore.error === null,
   });
+
+  useEffect(() => {
+    if (errStore.error) {
+      setTimeout(() => errStore.error = null, 6500);
+    }
+  }, [errStore.error]);
   return (
     <animated.div className="error-parent" style={errorDiv}>
       <div
         style={{ backgroundColor: Theme.shadeColor }}
         className="inner-parent"
       >
-        {error && <span>{error}</span>}
+        {errStore.error && <span>{errStore.error}</span>}
       </div>
     </animated.div>
   );
-}
+});
 
 export default ErrorModal;

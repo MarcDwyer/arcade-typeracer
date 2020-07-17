@@ -5,6 +5,7 @@ import { SET_TYPING } from "../reducers/text_reducer";
 import { WsPayload } from "./action_types";
 import { transformChar } from "../util";
 import { SET_APP_ERROR } from "../reducers/error_reducer";
+import { SET_PLAYER_DATA } from "../reducers/mutli_reducer";
 
 function handleEvents(ws: WebSocket, dispatch: Dispatch) {
   ws.addEventListener("message", (msg) => {
@@ -24,7 +25,11 @@ function handleEvents(ws: WebSocket, dispatch: Dispatch) {
           });
           break;
         case PayloadTypes.roomData:
-          console.log("triggered roomdata");
+          dispatch({
+            type: SET_PLAYER_DATA,
+            payload: data.payload,
+          });
+          break;
       }
     } catch (e) {
       console.error(e);
