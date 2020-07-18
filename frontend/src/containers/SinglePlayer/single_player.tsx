@@ -3,7 +3,8 @@ import { observer } from "mobx-react";
 
 import { Phases, PayloadTypes } from "../../enums";
 
-import TypingInterface from "../../components/TypingInterface/typing_interface";
+import CountdownPhase from "../../phase_components/CountdownPhase/countdown_phase";
+import TypingPhase from "../../phase_components/TypingPhase/type_phase";
 
 import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
@@ -11,15 +12,6 @@ import { CompletedMsg } from "../../styled-components/game_styles";
 import Store from "../../stores/main";
 
 const SinglePlayer = observer(() => {
-  // const dispatch = useDispatch();
-  // const [phase, textData, ws, countdown] = useSelector((
-  //   store: ReduxStore.State,
-  // ) => [
-  //   store.status.phase,
-  //   store.textData,
-  //   store.socket,
-  //   store.timer.countdown,
-  // ]);
   const store = useContext(Store);
   const { phase, socket, gameData, countdown } = store;
   const { game } = gameData;
@@ -41,7 +33,7 @@ const SinglePlayer = observer(() => {
       // dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
     }
   }, [phase, game.text]);
-  console.log(store.countdown.timer);
+
   return (
     <div className="single-player">
       {(() => {
@@ -58,14 +50,13 @@ const SinglePlayer = observer(() => {
           case Phases.waiting:
             return <span>Fetching typing data...</span>;
           case Phases.countdown:
-            return <span>Get Ready!</span>;
+            return <CountdownPhase timer={countdown.timer} />;
           case Phases.complete:
             return (
               <CompletedMsg>
                 <span>You have completed the race!</span>
                 <TryAgain
                   onClick={() => {
-                    //reset game state here
                     store.gameData.reset();
                   }}
                 >
@@ -74,7 +65,7 @@ const SinglePlayer = observer(() => {
               </CompletedMsg>
             );
           case Phases.typing:
-            return <TypingInterface gameData={game} phase={phase} />;
+            return <TypingPhase gameData={game} timer={countdown.timer} />;
           default:
             return <span>Phase could not be determined</span>;
         }

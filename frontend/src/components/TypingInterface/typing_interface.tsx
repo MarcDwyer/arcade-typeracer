@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
 import IndividualChar from "../Individual_Character/individualChar";
-import { handleTyping } from "../../actions/typing_actions";
 
 import { TypeRacingDiv } from "../../styled-components/game_styles";
 
@@ -9,17 +8,13 @@ import { MyInput } from "../../styled-components/inputs";
 
 import { GameData } from "../../stores/gameStore";
 
-import { Phases } from "../../enums";
-
 import "./typing_interface.scss";
-import { PhaseTypes } from "../../stores/phaseStore";
 
 type Props = {
   gameData: GameData;
-  phase: PhaseTypes;
 };
 
-const TypingInterface = ({ gameData, phase }: Props) => {
+const TypingInterface = ({ gameData }: Props) => {
   const { text, error, value } = gameData;
 
   const inputRef = useRef<HTMLInputElement | null>();
@@ -41,7 +36,6 @@ const TypingInterface = ({ gameData, phase }: Props) => {
                 })}
             </div>
             <MyInput
-              disabled={phase === Phases.complete}
               //@ts-ignore
               ref={inputRef}
               value={value}

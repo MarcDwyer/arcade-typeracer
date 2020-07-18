@@ -26,7 +26,6 @@ class Store {
   socket: null | WebSocket = null;
   @observable
   error: string | null = null;
-  @observable
   gameData = new GameState();
   @observable
   phase: PhaseTypes = Phases.waiting;
@@ -55,6 +54,10 @@ class Store {
     switch (phase) {
       case Phases.countdown:
         this.countdown.setTimer(8, () => this.phase = Phases.typing);
+        break;
+      case Phases.typing:
+        const dur = this.gameData.game.duration || 120;
+        this.countdown.setTimer(dur, () => this.phase = Phases.complete);
         break;
       default:
         console.log(`No case found for ${phase}`);
