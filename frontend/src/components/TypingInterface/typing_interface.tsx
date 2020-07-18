@@ -1,27 +1,27 @@
 import React, { useEffect, useRef } from "react";
 
 import IndividualChar from "../Individual_Character/individualChar";
-import { useDispatch } from "react-redux";
 import { handleTyping } from "../../actions/typing_actions";
-import { TextData } from "../../reducers/text_reducer";
-import { PhaseTypes } from "../../reducers/status_reducer";
 
 import { TypeRacingDiv } from "../../styled-components/game_styles";
 
 import { MyInput } from "../../styled-components/inputs";
 
-import "./typing_interface.scss";
+import { GameData } from "../../stores/gameStore";
+
 import { Phases } from "../../enums";
-import { Character } from "../../util";
+
+import "./typing_interface.scss";
+import { PhaseTypes } from "../../stores/phaseStore";
 
 type Props = {
-  textData: TextData;
-  text: Character[];
+  gameData: GameData;
   phase: PhaseTypes;
 };
 
-function TypingInterface({ text, phase }: Props) {
-  const { text, value, error } = props.textData;
+const TypingInterface = ({ gameData, phase }: Props) => {
+  const { text, error, value } = gameData;
+
   const inputRef = useRef<HTMLInputElement | null>();
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -41,14 +41,13 @@ function TypingInterface({ text, phase }: Props) {
                 })}
             </div>
             <MyInput
-              disabled={props.phase === Phases.complete}
+              disabled={phase === Phases.complete}
               //@ts-ignore
               ref={inputRef}
               value={value}
               onChange={(e) => {
                 let char = e.target.value;
                 char = char[char.length - 1];
-                dispatch(handleTyping(char));
               }}
             />
           </TypeRacingDiv>
@@ -56,6 +55,6 @@ function TypingInterface({ text, phase }: Props) {
       )}
     </div>
   );
-}
+};
 
 export default TypingInterface;

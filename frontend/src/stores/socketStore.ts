@@ -1,9 +1,3 @@
-import { createContext } from "react";
-import { observable } from "mobx";
-
-class SocketStore {
-  @observable
+export default class SocketStore {
   socket: WebSocket | null = null;
 }
-
-export default createContext(new SocketStore());

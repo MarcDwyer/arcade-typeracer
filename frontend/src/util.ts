@@ -7,7 +7,6 @@ export type Character = {
 
 export function transformChar(txt: string): Character[] {
   const result: Character[] = [];
-
   for (let x = 0; x < txt.length; x++) {
     const char = {
       char: txt[x],

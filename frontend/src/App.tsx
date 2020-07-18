@@ -6,8 +6,7 @@ import Homepage from "./containers/Homepage/home";
 import ErrorModal from "./containers/Error_Modal/error_modal";
 import { observer } from "mobx-react";
 
-import SocketStore from "./stores/socketStore";
-import ErrorStore from "./stores/errorStore";
+import Store from "./stores/main";
 
 import { isDev } from "./util";
 
@@ -18,11 +17,9 @@ import "./App.scss";
 // Number of words typed / time taken to complete
 
 const App = observer(() => {
-  const socketStore = useContext(SocketStore);
-  const errorStore = useContext(ErrorStore);
-
+  const store = useContext(Store);
   useEffect(() => {
-    if (!socketStore.socket) {
+    if (!store.socket) {
       const aUrl = isDev()
         ? `ws://localhost:1867/ws/`
         : `wss://${document.location.hostname}/ws/`;
@@ -30,15 +27,14 @@ const App = observer(() => {
 
       newSocket.onopen = function () {
         console.log("ws open");
-        if (errorStore.error) errorStore.error = null;
-        socketStore.socket = newSocket;
+        if (store.error) store.error = null;
+        store.socket = newSocket;
       };
       newSocket.onerror = function () {
-        errorStore.error = "Error connecting to server";
+        store.error = "Error connecting to server";
       };
     }
-  }, [socketStore.socket]);
-  console.log(socketStore.socket);
+  }, [store.socket]);
   return (
     <div
       className="App"

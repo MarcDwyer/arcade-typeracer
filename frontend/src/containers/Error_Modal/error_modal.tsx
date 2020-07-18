@@ -3,32 +3,32 @@ import { Theme } from "../../themes/theme_colors.";
 import { useSpring, animated } from "react-spring";
 import { observer } from "mobx-react";
 
-import ErrorStore from "../../stores/errorStore";
+import Store from "../../stores/main";
 
 import "./error_modal.scss";
 
 const ErrorModal = observer(() => {
-  const errStore = useContext(ErrorStore);
+  const store = useContext(Store);
   const errorDiv = useSpring({
     from: {
       transform: "translateX(+100%)",
     },
     transform: "translateX(0%)",
-    reverse: errStore.error === null,
+    reverse: store.error === null,
   });
 
   useEffect(() => {
-    if (errStore.error) {
-      setTimeout(() => errStore.error = null, 6500);
+    if (store.error) {
+      setTimeout(() => store.error = null, 6500);
     }
-  }, [errStore.error]);
+  }, [store.error]);
   return (
     <animated.div className="error-parent" style={errorDiv}>
       <div
         style={{ backgroundColor: Theme.shadeColor }}
         className="inner-parent"
       >
-        {errStore.error && <span>{errStore.error}</span>}
+        {store.error && <span>{store.error}</span>}
       </div>
     </animated.div>
   );

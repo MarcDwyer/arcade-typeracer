@@ -1,6 +1,4 @@
-import { observable, action } from "mobx";
 import { Character } from "../util";
-import { createContext } from "react";
 
 type PlayerStats = {
   wpm: number;
@@ -19,7 +17,7 @@ type Multi = {
   playerData: PlayerData | null;
 };
 
-class Game {
+export class GameData {
   text: Character[] | null = null;
   wordCount: number = 0;
   currIndex: number = 0;
@@ -34,13 +32,10 @@ class Game {
   };
 }
 
-class GameData {
-  @observable
-  game = new Game();
+export default class GameStore {
+  game = new GameData();
 
-  @action
   reset = () => {
-    this.game = new Game();
+    this.game = new GameData();
   };
 }
-export default createContext(new GameData());

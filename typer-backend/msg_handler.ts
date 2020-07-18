@@ -4,6 +4,7 @@ import Player from "./player.ts";
 
 import room from "./rooms.ts";
 import { randomTxt } from "./util.ts";
+import { SingleStruct } from "./payload_struct.ts";
 
 type Data = {
   type: string;
@@ -19,12 +20,14 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
 
   switch (data.type) {
     case PayloadTypes.singleTypingText:
+      const sPayload: SingleStruct = {
+        type: PayloadTypes.singleTypingText,
+        payload: randomTxt(),
+      };
       await ws.send(
-        JSON.stringify({
-          type: PayloadTypes.singleTypingText,
-          payload: randomTxt(),
-        }),
+        JSON.stringify(sPayload),
       );
+      console.log("sent single payload");
       break;
     case PayloadTypes.joinRoom:
       const { username } = data.payload;

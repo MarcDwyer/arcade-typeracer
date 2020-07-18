@@ -4,15 +4,11 @@ import { observer } from "mobx-react";
 import { Phases, PayloadTypes } from "../../enums";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
-import { setTimer } from "../../actions/timer_actions";
 
 import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
-import { CHANGE_PHASE } from "../../reducers/status_reducer";
-import { setPhasers } from "../../actions/status_actions";
 
-import SocketStore from "../../stores/socketStore";
-import PhaseStore from "../../stores/phaseStore";
+import Store from "../../stores/main";
 
 const SinglePlayer = observer(() => {
   // const dispatch = useDispatch();
@@ -24,25 +20,28 @@ const SinglePlayer = observer(() => {
   //   store.socket,
   //   store.timer.countdown,
   // ]);
-  const { socket } = useContext(SocketStore);
-  const phase = useContext(PhaseStore);
+  const store = useContext(Store);
+  const { phase, socket, gameData, countdown } = store;
+  const { game } = gameData;
+
   useEffect(() => {
     switch (phase) {
       case Phases.waiting:
-        if (socket) {
+        if (socket && !game.text) {
           socket.send(
             JSON.stringify({ type: PayloadTypes.single_typing_text }),
           );
         }
     }
-  }, [phase, socket]);
+  }, [phase, socket, game.text]);
 
   useEffect(() => {
-    if (phase === Phases.waiting && text) {
+    if (phase === Phases.waiting && game.text) {
       console.log("changing");
       // dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
     }
-  }, [phase, text]);
+  }, [phase, game.text]);
+  console.log(store.countdown.timer);
   return (
     <div className="single-player">
       {(() => {
@@ -51,7 +50,7 @@ const SinglePlayer = observer(() => {
             return (
               <StandardBtn
                 colorType="default"
-                onClick={() => gameStore.game.phase = Phases.countdown}
+                onClick={() => store.phase = Phases.countdown}
               >
                 Ready?
               </StandardBtn>
@@ -67,7 +66,7 @@ const SinglePlayer = observer(() => {
                 <TryAgain
                   onClick={() => {
                     //reset game state here
-                    gameStore.reset();
+                    store.gameData.reset();
                   }}
                 >
                   Try Again?
@@ -75,7 +74,7 @@ const SinglePlayer = observer(() => {
               </CompletedMsg>
             );
           case Phases.typing:
-            return <TypingInterface textData={textData} phase={phase} />;
+            return <TypingInterface gameData={game} phase={phase} />;
           default:
             return <span>Phase could not be determined</span>;
         }
