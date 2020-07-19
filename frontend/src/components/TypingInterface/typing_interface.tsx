@@ -6,17 +6,17 @@ import { TypeRacingDiv } from "../../styled-components/game_styles";
 
 import { MyInput } from "../../styled-components/inputs";
 
-import { GameData } from "../../stores/gameStore";
-
 import "./typing_interface.scss";
+import { Character } from "../../util";
 
 type Props = {
-  gameData: GameData;
+  text: Character[];
+  value: string;
+  error: string | null;
+  handleTyping: (char: string) => void;
 };
 
-const TypingInterface = ({ gameData }: Props) => {
-  const { text, error, value } = gameData;
-
+const TypingInterface = ({ error, value, text, handleTyping }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>();
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -31,8 +31,8 @@ const TypingInterface = ({ gameData }: Props) => {
             {error && <span style={{ color: "red" }}>{error}</span>}
             <div className="text-data">
               {text &&
-                text.map((char, index) => {
-                  return <IndividualChar key={index} char={char} />;
+                text.map((char) => {
+                  return <IndividualChar key={char.id} char={char} />;
                 })}
             </div>
             <MyInput
@@ -42,6 +42,7 @@ const TypingInterface = ({ gameData }: Props) => {
               onChange={(e) => {
                 let char = e.target.value;
                 char = char[char.length - 1];
+                handleTyping(char);
               }}
             />
           </TypeRacingDiv>

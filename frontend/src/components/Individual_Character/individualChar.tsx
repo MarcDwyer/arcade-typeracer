@@ -1,4 +1,6 @@
 import React from "react";
+import { observer } from "mobx-react";
+
 import { Character } from "../../util";
 import { Theme } from "../../themes/theme_colors.";
 import Color from "color";
@@ -6,7 +8,8 @@ import Color from "color";
 type Props = {
   char: Character;
 };
-function handleStyles(char: Character) {
+
+const handleStyles = (char: Character) => {
   let styles: any = {
     fontSize: "14px",
   };
@@ -19,10 +22,10 @@ function handleStyles(char: Character) {
     };
   }
   return styles;
-}
-function IndividualCharacter({ char }: Props) {
+};
+const IndividualCharacter = ({ char }: Props) => {
   const styles = handleStyles(char);
   return <span style={styles}>{char.char}</span>;
-}
+};
 
 export default IndividualCharacter;

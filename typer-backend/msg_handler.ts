@@ -27,7 +27,6 @@ export default async function HandleMsg(ws: MyWebSocket, msg: string) {
       await ws.send(
         JSON.stringify(sPayload),
       );
-      console.log("sent single payload");
       break;
     case PayloadTypes.joinRoom:
       const { username } = data.payload;

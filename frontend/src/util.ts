@@ -1,8 +1,10 @@
 import { RouteModes } from "./enums";
+import shortId from "shortid";
 
 export type Character = {
   char: string;
   completed: boolean;
+  id: string;
 };
 
 export function transformChar(txt: string): Character[] {
@@ -11,6 +13,7 @@ export function transformChar(txt: string): Character[] {
     const char = {
       char: txt[x],
       completed: false,
+      id: shortId.generate(),
     };
     result.push(char);
   }
@@ -40,13 +43,13 @@ export const roundTenth = (num: number, places: number = 2) => {
 };
 
 /**
- * 
+ *
  * @param totalChar the total amount of characters typed, even spaces.
- * @param time should be the amount of time spent typing 
+ * @param time should be the amount of time spent typing
  */
 export function calcWpm(totalChar: number, seconds: number) {
   const minutes = seconds / 60;
-  return roundTenth((totalChar / 5) / minutes);
+  return roundTenth(totalChar / 5 / minutes);
 }
 
 export function getProgress(totalChar: number, currChar: number) {

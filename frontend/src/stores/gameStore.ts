@@ -1,4 +1,7 @@
 import { Character } from "../util";
+import { observable, action, reaction } from "mobx";
+import { Store } from "./main";
+import { Phases } from "../enums";
 
 type PlayerStats = {
   wpm: number;
@@ -17,25 +20,46 @@ type Multi = {
   playerData: PlayerData | null;
 };
 
-export class GameData {
-  text: Character[] | null = null;
+export default class GameStore {
+  @observable text: Character[] | null = null;
   wordCount: number = 0;
+  @observable
   currIndex: number = 0;
-  value: string = "";
+  @observable value: string = "";
   wpm: number = 0;
   progress: number = 0;
-  error: string | null = null;
+  @observable error: string | null = null;
   duration: null | number = null;
   multi: Multi = {
     playerData: null,
     playerStats: [],
   };
-}
 
-export default class GameStore {
-  game = new GameData();
+  constructor(private store: Store) {
+    reaction(() => this.currIndex, this.monitorIndex);
+  }
 
-  reset = () => {
-    this.game = new GameData();
+  @action
+  monitorIndex = () => {
+    if (this.text && this.currIndex === this.text.length) {
+      this.store.phase = Phases.complete;
+    }
+  };
+  @action handleTyping = (char: string) => {
+    const { currIndex, error } = this;
+    if (!this.text) return;
+    const currChar = this.text[currIndex];
+    if (char !== currChar.char) {
+      this.error = "Invalid character";
+      return;
+    }
+    if (error) this.error = null;
+    if (char === " ") {
+      this.value = "";
+    } else {
+      this.value += char;
+    }
+    currChar.completed = true;
+    ++this.currIndex;
   };
 }

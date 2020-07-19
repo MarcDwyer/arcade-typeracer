@@ -13,36 +13,27 @@ import Store from "../../stores/main";
 
 const SinglePlayer = observer(() => {
   const store = useContext(Store);
-  const { phase, socket, gameData, countdown } = store;
-  const { game } = gameData;
+  const { gameData, socket, countdown } = store;
 
   useEffect(() => {
-    switch (phase) {
-      case Phases.waiting:
-        if (socket && !game.text) {
-          socket.send(
-            JSON.stringify({ type: PayloadTypes.single_typing_text }),
-          );
-        }
+    if (!gameData.text && socket) {
+      socket.send(
+        JSON.stringify({
+          type: PayloadTypes.single_typing_text,
+        })
+      );
     }
-  }, [phase, socket, game.text]);
-
-  useEffect(() => {
-    if (phase === Phases.waiting && game.text) {
-      console.log("changing");
-      // dispatch({ type: CHANGE_PHASE, payload: Phases.loaded });
-    }
-  }, [phase, game.text]);
+  }, [gameData.text, socket]);
 
   return (
     <div className="single-player">
       {(() => {
-        switch (phase) {
+        switch (store.phase) {
           case Phases.loaded:
             return (
               <StandardBtn
                 colorType="default"
-                onClick={() => store.phase = Phases.countdown}
+                onClick={() => (store.phase = Phases.countdown)}
               >
                 Ready?
               </StandardBtn>
@@ -57,7 +48,7 @@ const SinglePlayer = observer(() => {
                 <span>You have completed the race!</span>
                 <TryAgain
                   onClick={() => {
-                    store.gameData.reset();
+                    store.resetGame();
                   }}
                 >
                   Try Again?
@@ -65,7 +56,7 @@ const SinglePlayer = observer(() => {
               </CompletedMsg>
             );
           case Phases.typing:
-            return <TypingPhase gameData={game} timer={countdown.timer} />;
+            return <TypingPhase timer={countdown.timer} gameData={gameData} />;
           default:
             return <span>Phase could not be determined</span>;
         }

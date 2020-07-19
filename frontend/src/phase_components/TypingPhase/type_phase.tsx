@@ -1,20 +1,30 @@
 import React from "react";
+import { observer } from "mobx-react";
 
 import TypingInterface from "../../components/TypingInterface/typing_interface";
 import Timer from "../../components/Timer/timer";
 
-import { GameData } from "../../stores/gameStore";
+import GameStore from "../../stores/gameStore";
 
 type Props = {
-  gameData: GameData;
+  gameData: GameStore;
   timer: number;
 };
 
-export default function TypingPhase({ gameData, timer }: Props) {
+const TypingPhase = observer(({ gameData, timer }: Props) => {
   return (
     <div className="typing-phase">
       <Timer timer={timer} />
-      <TypingInterface gameData={gameData} />
+      {gameData.text && (
+        <TypingInterface
+          handleTyping={gameData.handleTyping}
+          value={gameData.value}
+          error={gameData.error}
+          text={gameData.text}
+        />
+      )}
     </div>
   );
-}
+});
+
+export default TypingPhase;
