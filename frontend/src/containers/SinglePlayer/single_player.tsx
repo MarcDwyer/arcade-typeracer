@@ -16,24 +16,24 @@ const SinglePlayer = observer(() => {
   const { gameData, socket, countdown } = store;
 
   useEffect(() => {
-    if (!gameData.text && socket) {
+    if (socket && gameData.phase === Phases.waiting) {
       socket.send(
         JSON.stringify({
           type: PayloadTypes.single_typing_text,
         })
       );
     }
-  }, [gameData.text, socket]);
+  }, [socket, gameData.phase]);
 
   return (
     <div className="single-player">
       {(() => {
-        switch (store.phase) {
+        switch (gameData.phase) {
           case Phases.loaded:
             return (
               <StandardBtn
                 colorType="default"
-                onClick={() => (store.phase = Phases.countdown)}
+                onClick={() => gameData.changePhase(Phases.countdown)}
               >
                 Ready?
               </StandardBtn>
@@ -48,7 +48,7 @@ const SinglePlayer = observer(() => {
                 <span>You have completed the race!</span>
                 <TryAgain
                   onClick={() => {
-                    store.resetGame();
+                    store.gameData.resetGame();
                   }}
                 >
                   Try Again?

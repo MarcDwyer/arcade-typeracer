@@ -1,12 +1,9 @@
 import GameState from "./gameStore";
-import { PhaseTypes } from "./phaseStore";
 import CountdownState from "./countdownStore";
 import { createContext } from "react";
 
-import { observable, reaction, action, autorun } from "mobx";
+import { observable, reaction, action } from "mobx";
 import { Phases, PayloadTypes } from "../enums";
-import { transformChar } from "../util";
-import { SingleStruct } from "../payload_struct";
 
 function handleEvts(msg: MessageEvent, store: Store) {
   try {
@@ -14,7 +11,7 @@ function handleEvts(msg: MessageEvent, store: Store) {
     if (!("type" in data)) throw "Invalid payload format";
     switch (data.type) {
       case PayloadTypes.single_typing_text:
-        store.setSinglePayload(data);
+        store.gameData.setSinglePayload(data);
     }
   } catch (err) {
     console.error(err);
@@ -22,13 +19,11 @@ function handleEvts(msg: MessageEvent, store: Store) {
 }
 
 export class Store {
-  @observable
-  socket: null | WebSocket = null;
+  @observable socket: null | WebSocket = null;
   @observable error: string | null = null;
-  @observable
-  phase: PhaseTypes = Phases.waiting;
+
   countdown = new CountdownState();
-  gameData: GameState;
+  gameData = new GameState();
 
   constructor() {
     reaction(
@@ -40,44 +35,30 @@ export class Store {
         }
       }
     );
-    reaction(() => this.phase, this.handlePhase);
-    this.gameData = new GameState(this);
+    reaction(() => this.gameData.phase, this.handlePhase);
   }
-  @action
-  setSinglePayload = ({ payload }: SingleStruct) => {
-    const { time, text } = payload;
-    this.gameData.duration = time;
-    this.gameData.text = transformChar(text);
-    this.phase = Phases.loaded;
-  };
+
   @action
   private handlePhase = () => {
-    const { phase } = this;
+    const { phase } = this.gameData;
+    console.log(`phase change req: ${phase}`);
     switch (phase) {
       case Phases.countdown:
-        this.countdown.setTimer(8, () => (this.phase = Phases.typing));
+        this.countdown.setTimer(8, () =>
+          this.gameData.changePhase(Phases.typing)
+        );
         break;
       case Phases.typing:
         const dur = this.gameData.duration || 120;
-        this.countdown.setTimer(dur, () => (this.phase = Phases.complete));
+        this.countdown.setTimer(dur, () =>
+          this.gameData.changePhase(Phases.complete)
+        );
+        break;
+      case Phases.complete:
+        this.countdown.stopCounter();
         break;
       default:
         console.log(`No case found for ${phase}`);
-    }
-  };
-  @action
-  resetGame = () => {
-    this.gameData = new GameState(this);
-    this.countdown = new CountdownState();
-    this.phase = Phases.waiting;
-  };
-  @action
-  monitorIndex = () => {
-    const { currIndex, text } = this.gameData;
-    if (text) console.log(text.length);
-    if (text && currIndex === text.length) {
-      console.log("completed");
-      this.phase = Phases.complete;
     }
   };
 }

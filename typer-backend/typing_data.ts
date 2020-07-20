@@ -26,4 +26,10 @@ export const textData: TextData[] = [
       "Do the difficult things while they are easy and do the great things while they are small. A journey of a thousand miles must begin with a single step.",
     time: 120,
   },
+  {
+    name: "its me",
+    text:
+      "Apple bottom jeans boots with the fur and the whole club is looking at her",
+    time: 60,
+  },
 ];
