@@ -5,6 +5,7 @@ import { Phases, PayloadTypes } from "../../enums";
 
 import CountdownPhase from "../../phase_components/CountdownPhase/countdown_phase";
 import TypingPhase from "../../phase_components/TypingPhase/type_phase";
+import CompletePhase from "../../phase_components/CompletedPhase/completed_phase";
 
 import { TryAgain, StandardBtn } from "../../styled-components/buttons";
 import { CompletedMsg } from "../../styled-components/game_styles";
@@ -20,7 +21,7 @@ const SinglePlayer = observer(() => {
       socket.send(
         JSON.stringify({
           type: PayloadTypes.single_typing_text,
-        })
+        }),
       );
     }
   }, [socket, gameData.phase]);
@@ -43,18 +44,7 @@ const SinglePlayer = observer(() => {
           case Phases.countdown:
             return <CountdownPhase timer={countdown.timer} />;
           case Phases.complete:
-            return (
-              <CompletedMsg>
-                <span>You have completed the race!</span>
-                <TryAgain
-                  onClick={() => {
-                    store.gameData.resetGame();
-                  }}
-                >
-                  Try Again?
-                </TryAgain>
-              </CompletedMsg>
-            );
+            return <CompletePhase gameData={store.gameData} />;
           case Phases.typing:
             return <TypingPhase timer={countdown.timer} gameData={gameData} />;
           default:

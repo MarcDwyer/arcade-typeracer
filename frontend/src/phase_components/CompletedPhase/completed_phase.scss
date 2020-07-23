@@ -1,0 +1,9 @@
+.completed-phase {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px green;
+
+  .final-results {
+    margin-bottom: 10px;
+  }
+}

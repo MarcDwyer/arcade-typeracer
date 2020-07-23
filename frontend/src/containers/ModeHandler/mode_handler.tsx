@@ -1,11 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
 
-import { isDev } from "../../util";
+import Store from "../../stores/main";
 
 import SinglePlayer from "../SinglePlayer/single_player";
-import MultiPlayer from "../MultiPlayer/multi_player";
 
 import {
   ModeHandlerDiv,
@@ -18,6 +16,12 @@ import "./mode_handler.scss";
 
 function ModeHandler() {
   const { mode } = useParams();
+  const store = useContext(Store);
+
+  useEffect(() => {
+    console.log(`mode handler ${mode}`);
+    store.gameData.gameMode = mode;
+  }, [mode]);
 
   return (
     <ModeHandlerDiv>

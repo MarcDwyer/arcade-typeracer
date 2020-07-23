@@ -29,6 +29,7 @@ export const ModeHandlerDiv = styled.div<PModeHandler>`
   flex-direction: column;
   margin: auto;
   padding: 15px 15px;
+  position: relative;
 `;
 
 export const ModeDisplayDiv = styled.div`

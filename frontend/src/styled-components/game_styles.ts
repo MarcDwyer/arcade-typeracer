@@ -15,9 +15,4 @@ export const TypeRacingDiv = styled.div`
 export const CompletedMsg = styled.div`
   display: flex;
   flex-direction: column;
-
-  button {
-    margin-top: 25px !important;
-    padding: 10px 10px;
-  }
 `;

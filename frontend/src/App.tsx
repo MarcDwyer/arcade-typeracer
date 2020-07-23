@@ -16,7 +16,7 @@ import "./App.scss";
 
 // Number of words typed / time taken to complete
 
-const App = observer(() => {
+const App = () => {
   const store = useContext(Store);
   useEffect(() => {
     if (!store.socket) {
@@ -53,6 +53,6 @@ const App = observer(() => {
       </div>
     </div>
   );
-});
+};
 
 export default App;

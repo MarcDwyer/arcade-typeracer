@@ -48,6 +48,7 @@ export const roundTenth = (num: number, places: number = 2) => {
  * @param time should be the amount of time spent typing
  */
 export function calcWpm(totalChar: number, seconds: number) {
+  if (totalChar === 0) return totalChar;
   const minutes = seconds / 60;
   return roundTenth(totalChar / 5 / minutes);
 }
